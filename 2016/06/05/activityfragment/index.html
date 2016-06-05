@@ -84,20 +84,17 @@
 
 
 
-<meta name="description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。
-handler方式这是一种最不好的初级方式，在fragment中调用activity中的handler发送信息，activity处理信息。">
+<meta name="description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用观察者完美解决activity与fragment通信问题">
 <meta property="og:url" content="http://yoursite.com/2016/06/05/activityfragment/index.html">
 <meta property="og:site_name" content="BoBoMEe">
-<meta property="og:description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。
-handler方式这是一种最不好的初级方式，在fragment中调用activity中的handler发送信息，activity处理信息。">
+<meta property="og:description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。">
 <meta property="og:image" content="https://github.com/BoBoMEe/ActivityFragment/raw/master/activityfragment.png">
-<meta property="og:updated_time" content="2016-06-05T03:43:03.000Z">
+<meta property="og:updated_time" content="2016-06-05T03:44:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用观察者完美解决activity与fragment通信问题">
-<meta name="twitter:description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。
-handler方式这是一种最不好的初级方式，在fragment中调用activity中的handler发送信息，activity处理信息。">
+<meta name="twitter:description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。">
 <meta name="twitter:image" content="https://github.com/BoBoMEe/ActivityFragment/raw/master/activityfragment.png">
 
 
@@ -277,6 +274,7 @@ handler方式这是一种最不好的初级方式，在fragment中调用activity
 
       
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，<br>handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。</p>
+<a id="more"></a>
 <h2 id="handler方式"><a href="#handler方式" class="headerlink" title="handler方式"></a>handler方式</h2><p>这是一种最不好的初级方式，在fragment中调用activity中的handler发送信息，activity处理信息。缺点也十分明显，耦合性极强，并且获取不了activity的反馈，总之体验十分不好。</p>
 <h2 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h2><p>这是一种另类的玩法，个人感觉大材小用了。广播适用于一对多且接收者不明确的情况下，<br>而且广播传播的信息需要实现序列化借口，总之是一种耗费性能的方式。</p>
 <h2 id="EvnetBus"><a href="#EvnetBus" class="headerlink" title="EvnetBus"></a>EvnetBus</h2><p>EvnetBus作为一款事件总线存在，可以用于Action的传递，但是这种方式的缺点有：是用反射（对性能有影响），EvnetBus发送者和接受者分离严重，不好维护，且不可以获取activity反馈，也不是十分理想。</p>
