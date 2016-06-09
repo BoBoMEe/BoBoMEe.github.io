@@ -87,10 +87,10 @@
 <meta name="description" content="概述github pages原本是github提供给开源项目做项目介绍的，既然是静态页面，当然拿来做blog既免费又方便了，现在流行用hexo框架 ＋ next主题，鉴于本人在搭建过程中踩过的坑，这里记录一下，希望能够方便后来人。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="github pages ＋ hexo ＋ next搭建个人博客">
-<meta property="og:url" content="http://yoursite.com/2016/05/04/hexo_blog/index.html">
+<meta property="og:url" content="http://yoursite.com/2016/05/04/hexoblog/index.html">
 <meta property="og:site_name" content="BoBoMEe">
 <meta property="og:description" content="概述github pages原本是github提供给开源项目做项目介绍的，既然是静态页面，当然拿来做blog既免费又方便了，现在流行用hexo框架 ＋ next主题，鉴于本人在搭建过程中踩过的坑，这里记录一下，希望能够方便后来人。">
-<meta property="og:updated_time" content="2016-06-05T02:17:39.000Z">
+<meta property="og:updated_time" content="2016-06-05T15:43:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="github pages ＋ hexo ＋ next搭建个人博客">
 <meta name="twitter:description" content="概述github pages原本是github提供给开源项目做项目介绍的，既然是静态页面，当然拿来做blog既免费又方便了，现在流行用hexo框架 ＋ next主题，鉴于本人在搭建过程中踩过的坑，这里记录一下，希望能够方便后来人。">
@@ -284,10 +284,8 @@
 <h2 id="初始化blog"><a href="#初始化blog" class="headerlink" title="初始化blog"></a>初始化blog</h2><h3 id="hexo-init"><a href="#hexo-init" class="headerlink" title="hexo init"></a>hexo init</h3><p>新建blog目录，为方便操作，在桌面上新建目录<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br><span class="line">cd Desktop/</span><br><span class="line">mkdir hexo</span><br><span class="line">cd hexo/</span><br><span class="line">hexo init</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
 <p>开启本地服务预览<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure></p>
 <p>此命令执行后，就可以通过<code>http://localhost:4000</code>查看博客了。</p>
-<h3 id="config-blog"><a href="#config-blog" class="headerlink" title="config blog"></a>config blog</h3><p>此时会看到hexo目录下文件</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">_config.yml    </span><br><span class="line">db.json</span><br><span class="line">node_modules</span><br><span class="line"><span class="keyword">package</span>.json</span><br><span class="line">scaffolds</span><br><span class="line">source</span><br><span class="line">themes</span><br></pre></td></tr></table></figure>
-<p>_config.yml 是全局配置文件，在最后加上如下语句和github关联起来</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">    type: git</span><br><span class="line">    repository: https:<span class="comment">//github.com/BoBoMEe/bobomee.github.io.git</span></span><br><span class="line">    branch: master</span><br></pre></td></tr></table></figure>
+<h3 id="config-blog"><a href="#config-blog" class="headerlink" title="config blog"></a>config blog</h3><p>此时会看到hexo目录下文件<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">_config.yml    </span><br><span class="line">db.json</span><br><span class="line">node_modules</span><br><span class="line"><span class="keyword">package</span>.json</span><br><span class="line">scaffolds</span><br><span class="line">source</span><br><span class="line">themes</span><br></pre></td></tr></table></figure></p>
+<p>_config.yml :是全局配置文件，在最后加上如下语句和github关联起来<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">    type: git</span><br><span class="line">    repository: https:<span class="comment">//github.com/BoBoMEe/bobomee.github.io.git</span></span><br><span class="line">    branch: master</span><br></pre></td></tr></table></figure></p>
 <p>这里有坑：需要注意冒号后面需要有空格，其实这个文件的所有冒号后面都需要加上空格。</p>
 <h3 id="deploy"><a href="#deploy" class="headerlink" title="deploy"></a>deploy</h3><p>推送到github，可以用如下命令</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g <span class="comment">//generate</span></span><br><span class="line">hexo d <span class="comment">//deploy</span></span><br></pre></td></tr></table></figure>
@@ -331,15 +329,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/20/orm_sqlite/" rel="next" title="Android 之数据库的使用">
-                <i class="fa fa-chevron-left"></i> Android 之数据库的使用
+              <a href="/2016/04/20/androidorm/" rel="next" title="Android Orm数据库总结">
+                <i class="fa fa-chevron-left"></i> Android Orm数据库总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/07/git_operate/" rel="prev" title="git常用命令">
+              <a href="/2016/05/07/gitbasic/" rel="prev" title="git常用命令">
                 git常用命令 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -409,7 +407,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

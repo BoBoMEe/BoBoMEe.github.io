@@ -233,8 +233,109 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/05/dagger2basic/" itemprop="url">
+                  Android:Dagger2学习之由浅入深
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-05T23:02:14+08:00" content="Jun 5 2016">
+              Jun 5 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Dagger2是一款使用在Java和Android上的静态的,运行时依赖注入框架.官方地址:<a href="http://google.github.io/dagger/">http://google.github.io/dagger/</a></p>
+<p>记得当初刚学习Dagger2的时候看了许多博客,但是感觉上手依然困难,所谓光学不练就是这个意思吧</p>
+<p>时至今日,用上此框架的同仁越来越多.分析文章也很多,上手相对要简单了许多.</p>
+<p>学习Dagger2最先要明白的是其各个注解的含义及工作原理,这样才可以快速的上手和使用.</p>
+<p>在这里简要记录一下在使用Dagger2过程中的感受和心得体会.</p>
+<p>本文示例代码地址:<a href="https://github.com/BoBoMEe/Dagger2Sample">Dagger2Sample</a></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/05/dagger2basic/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/05/activityfragment/" itemprop="url">
-                  使用观察者完美解决activity与fragment通信问题
+                  使用观察者模式完美解决activity与fragment通信问题
                 </a>
               
             
@@ -329,111 +430,7 @@
             
               
                 
-                <a class="post-title-link" href="/2016/05/14/Retrofit/" itemprop="url">
-                  Retrofit2.0使用总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-14T22:02:00+08:00" content="May 14 2016">
-              May 14 2016
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Retrofit是由<a href="https://github.com/square">Square</a>公司出品的针对于Android和Java的类型安全的Http客户端，网络服务基于OkHttp 。</p>
-<h2 id="变化"><a href="#变化" class="headerlink" title="变化"></a>变化</h2><p>如果之前使用过Retrofit1，2.0后的API会有一些变化，<br>比如创建方式，拦截器，错误处理，转换器等，参考：<a href="http://blog.csdn.net/tiankong1206/article/details/50720758">更新到Retrofit2的一些技巧</a></p>
-<ol>
-<li>在Retrofit1中使用的是RestAdapter，而Retrofit2中使用的Retrofit实例，之前的setEndpoint变为了baseUrl。</li>
-<li>Retrofit1中使用setRequestInterceptor设置拦截器，对http请求进行相应等处理。</li>
-<li>Retrofit2通过OKHttp的拦截器拦截http请求进行监控，重写或重试等，包括日志打印等。</li>
-<li>converter，Retrofit1中的setConverter，换以addConverterFactory，用于支持Gson转换。</li>
-</ol>
-<p>更多变化参考：<a href="https://github.com/square/retrofit/blob/master/CHANGELOG.md">官方CHANGELOG.md</a></p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/14/Retrofit/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/12/vp/" itemprop="url">
+                <a class="post-title-link" href="/2016/05/12/androidbanner/" itemprop="url">
                   Android无限轮播Banner的实现
                 </a>
               
@@ -476,9 +473,11 @@
 
       
         
-          <h2 id="概述"><a href="#概述" class="headerlink" title="##概述"></a>##概述</h2><p>应用首页的广告轮播<code>Banner</code>，一般都会使用<code>ViewPager</code>来实现，但是<code>ViewPager</code> 没有轮播效果。<br>现成有这么几种实现方案，<br>1.使用<code>Integer.MAX_VALUE</code> ,理论上很难达到边界。<br>2.装饰<code>adapter</code>方式<a href="https://github.com/imbryk/LoopingViewPager" target="_blank">[imbryk/LoopingViewPager@Github]</a>。<br>3.扩展<code>ViewPager</code>方式<a href="https://github.com/yanzm/LoopViewPager" target="_blank">[yanzm/LoopViewPager]</a>。</p>
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><hr>
+<p>应用首页的广告轮播<code>Banner</code>，一般都会使用<code>ViewPager</code>来实现，但是<code>ViewPager</code> 没有轮播效果。<br>现成有这么几种实现方案:</p>
+<p>1.使用<code>Integer.MAX_VALUE</code> ,理论上很难达到边界。<br/><br>2.装饰<code>adapter</code>方式<a href="https://github.com/imbryk/LoopingViewPager">imbryk/LoopingViewPager@Github</a>。<br/><br>3.扩展<code>ViewPager</code>方式<a href="https://github.com/yanzm/LoopViewPager">yanzm/LoopViewPager</a>。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/12/vp/#more" rel="contents">
+            <a class="btn" href="/2016/05/12/androidbanner/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -529,7 +528,106 @@
             
               
                 
-                <a class="post-title-link" href="/2016/05/07/git_operate/" itemprop="url">
+                <a class="post-title-link" href="/2016/05/12/retrofit/" itemprop="url">
+                  Retrofit2.0使用总结及注意事项
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-12T00:13:46+08:00" content="May 12 2016">
+              May 12 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>随着Google对HttpClient 摒弃,和Volley的逐渐没落,OkHttp开始异军突起,而Retrofit则对okHttp进行了强制依赖。</p>
+<p>Retrofit是由<a href="https://github.com/square">Square</a>公司出品的针对于Android和Java的类型安全的Http客户端，</p>
+<p>如果看源码会发现其实质上就是对okHttp的封装，使用面向接口的方式进行网络请求，利用动态生成的代理类封装了网络接口请求的底层,</p>
+<p>其将请求返回javaBean，对网络认证 REST API进行了很好对支持此，使用Retrofit将会极大的提高我们应用的网络体验。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/12/retrofit/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/07/gitbasic/" itemprop="url">
                   git常用命令
                 </a>
               
@@ -574,7 +672,7 @@
         
           <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>git 作为我们常用的版本管理工具，提供了丰富的命令操作,这里记录一下开发中我们常用的命令，以备不时之需。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/07/git_operate/#more" rel="contents">
+            <a class="btn" href="/2016/05/07/gitbasic/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -625,7 +723,7 @@
             
               
                 
-                <a class="post-title-link" href="/2016/05/04/hexo_blog/" itemprop="url">
+                <a class="post-title-link" href="/2016/05/04/hexoblog/" itemprop="url">
                   github pages ＋ hexo ＋ next搭建个人博客
                 </a>
               
@@ -670,7 +768,7 @@
         
           <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>github pages原本是github提供给开源项目做项目介绍的，既然是静态页面，当然拿来做blog既免费又方便了，现在流行用hexo框架 ＋ next主题，鉴于本人在搭建过程中踩过的坑，这里记录一下，希望能够方便后来人。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/04/hexo_blog/#more" rel="contents">
+            <a class="btn" href="/2016/05/04/hexoblog/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -721,8 +819,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/20/orm_sqlite/" itemprop="url">
-                  Android 之数据库的使用
+                <a class="post-title-link" href="/2016/04/20/androidorm/" itemprop="url">
+                  Android Orm数据库总结
                 </a>
               
             
@@ -764,10 +862,106 @@
 
       
         
-          <p>##概述</p>
-<p>在android平台上，常用的数据保存方式有Preference，文件和数据库，针对于数据库操作，<br>市面上常用的几款orm，主要有OrmLite，SugarORM，GreenDAO，Active Android，Realm</p>
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在android平台上，常用的数据保存方式有Preference，文件和数据库，针对于数据库操作，<br>一般都会采用orm框架来解决问题，Android中使用比较广泛的Orm有OrmLite，SugarORM，GreenDAO，ActiveAndroid，Realm等</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/20/orm_sqlite/#more" rel="contents">
+            <a class="btn" href="/2016/04/20/androidorm/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/30/ioc_di/" itemprop="url">
+                  Java依赖注入（控制反转）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-30T21:53:46+08:00" content="Dec 30 2015">
+              Dec 30 2015
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>名词释义：<br>依赖注入(Dependency Injection)，俗称DI。我们将互相协的关系称为依赖关系，在Java应用中，A对象调用了B对象的方法，我们可以说A依赖于B。<br>系统将实例创建出来，供调用着使用，就可以看作是系统将依赖注入了调用者。</p>
+<p>控制反转(Inversion of Control),俗称IoC。控制反转就是关于一个对象如何获取他所依赖的对象的引用这个责任的反转。在Java中，就是不需要调用者new出来一个依赖对象，这个责任交给系统，在需要的时候直接使用系统提供的实例。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/12/30/ioc_di/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -838,7 +1032,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

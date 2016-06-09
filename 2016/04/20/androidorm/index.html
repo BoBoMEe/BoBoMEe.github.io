@@ -1,0 +1,577 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="orm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="概述在android平台上，常用的数据保存方式有Preference，文件和数据库，针对于数据库操作，一般都会采用orm框架来解决问题，Android中使用比较广泛的Orm有OrmLite，SugarORM，GreenDAO，ActiveAndroid，Realm等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Orm数据库总结">
+<meta property="og:url" content="http://yoursite.com/2016/04/20/androidorm/index.html">
+<meta property="og:site_name" content="BoBoMEe">
+<meta property="og:description" content="概述在android平台上，常用的数据保存方式有Preference，文件和数据库，针对于数据库操作，一般都会采用orm框架来解决问题，Android中使用比较广泛的Orm有OrmLite，SugarORM，GreenDAO，ActiveAndroid，Realm等">
+<meta property="og:updated_time" content="2016-06-06T15:39:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Orm数据库总结">
+<meta name="twitter:description" content="概述在android平台上，常用的数据保存方式有Preference，文件和数据库，针对于数据库操作，一般都会采用orm框架来解决问题，Android中使用比较广泛的Orm有OrmLite，SugarORM，GreenDAO，ActiveAndroid，Realm等">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android Orm数据库总结 | BoBoMEe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BoBoMEe</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">好好学习，天天向上</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android Orm数据库总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-20T22:02:00+08:00" content="Apr 20 2016">
+              Apr 20 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在android平台上，常用的数据保存方式有Preference，文件和数据库，针对于数据库操作，<br>一般都会采用orm框架来解决问题，Android中使用比较广泛的Orm有OrmLite，SugarORM，GreenDAO，ActiveAndroid，Realm等</p>
+<a id="more"></a>
+<h2 id="OrmLite"><a href="#OrmLite" class="headerlink" title="OrmLite"></a>OrmLite</h2><p>OrmLite是java平台的Orm框架,可以在任何使用Java的地方,支持JDBC，Spring等，用到了很多注解 (Annotation),<br>官网地址<a href="http://ormlite.com/" target="_blank" rel="external">http://ormlite.com/</a></p>
+<p>启用方式: 第一步,编写JavaBean</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@DatabaseTable</span>(tableName = <span class="string">"users"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@DatabaseField</span>(id = <span class="keyword">true</span>)</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="meta">@DatabaseField</span></span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// ORMLite needs a no-arg constructor</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(String username, String password)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.username = username;</span><br><span class="line">        <span class="keyword">this</span>.password = password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Implementing getter and setter methods</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二步: 编写DatabaseHelper,继承OrmLiteSqliteOpenHelper,具体查看Sample,也十分简单</p>
+<p>第三步: 通过helper.getUserDao()来进行CRUD操作</p>
+<p>create(user),deleteById(id),update(user),queryForAll()等.</p>
+<h2 id="SugarORM"><a href="#SugarORM" class="headerlink" title="SugarORM"></a>SugarORM</h2><p>SugarORM是android 专用orm，提供save(), delete() 和 find()/findById()方法，官网地址:<a href="http://satyan.github.io/sugar/getting-started.html" target="_blank" rel="external">http://satyan.github.io/sugar/getting-started.html</a></p>
+<p>启用方式：第一步:配置meta-data<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta-data android:name=<span class="string">"DATABASE"</span> android:value=<span class="string">"my_database.db"</span> /&gt;</span><br><span class="line">&lt;meta-data android:name=<span class="string">"VERSION"</span> android:value=<span class="string">"1"</span> /&gt;</span><br><span class="line">&lt;meta-data android:name=<span class="string">"QUERY_LOG"</span> android:value=<span class="string">"true"</span> /&gt;</span><br><span class="line">&lt;meta-data android:name=<span class="string">"DOMAIN_PACKAGE_NAME"</span> android:value=<span class="string">"com.my-domain"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>第二步: JavaBean,需要继承SugarRecord,或者使用@Table注解<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">SugarRecord</span>&lt;<span class="title">User</span>&gt; </span>&#123;</span><br><span class="line">    String username;</span><br><span class="line">    String password;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">    <span class="meta">@Ignore</span></span><br><span class="line">    String bio; <span class="comment">//this will be ignored by SugarORM</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(String username, String password,<span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.username = username;</span><br><span class="line">        <span class="keyword">this</span>.password = password;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>CRUD: 通过save(), delete() 和 find()方法完成<br>其中update操作.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Book book = Book.findById(Book.class, <span class="number">1</span>);</span><br><span class="line">book.title = <span class="string">"updated title here"</span>; <span class="comment">// modify the values</span></span><br><span class="line">book.edition = <span class="string">"3rd edition"</span>;</span><br><span class="line">book.save(); <span class="comment">// updates the previous entry with new values.</span></span><br></pre></td></tr></table></figure>
+<h2 id="GreenDAO"><a href="#GreenDAO" class="headerlink" title="GreenDAO"></a>GreenDAO</h2><p>GreenDAO 号称Android上最快的orm框架，每秒数千条记录。官网地址:<a href="http://greenrobot.org/greendao/" target="_blank" rel="external">http://greenrobot.org/greendao/</a></p>
+<p>作为一款老字号的Orm框架,网上的介绍也比较多了,上手不是很方便,需要建立Java工程来生成JavaBean和Dao.其后的CRUD操作都是依赖于Dao来完成.</p>
+<h2 id="ActiveAndroid"><a href="#ActiveAndroid" class="headerlink" title="ActiveAndroid"></a>ActiveAndroid</h2><p>ActiveAndroid项目地址:<a href="https://github.com/pardom/ActiveAndroid" target="_blank" rel="external">https://github.com/pardom/ActiveAndroid</a></p>
+<p>使用ActiveAndroid，需要在AndroidManifest中添加meta信息,用注解生成模型<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta-data android:name=<span class="string">"AA_DB_NAME"</span> android:value=<span class="string">"my_database.db"</span> /&gt;</span><br><span class="line">&lt;meta-data android:name=<span class="string">"AA_DB_VERSION"</span> android:value=<span class="string">"1"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>然后需要在Application中使用 ActiveAndroid.initialize(this);初始化<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyApplication</span> <span class="keyword">extends</span> <span class="title">SomeLibraryApplication</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate();</span><br><span class="line">        ActiveAndroid.initialize(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>CRUD:<br>通过类Select(查询),Delete(删),bean.save()增改,其wiki介绍也十分详细</p>
+<h2 id="Realm"><a href="#Realm" class="headerlink" title="Realm"></a>Realm</h2><p>一个不依赖于SqlLite的ORM库,低层使用c++ 实现的,是最新流行的Orm框架,而且是跨平台的.官网地址:<a href="https://realm.io" target="_blank" rel="external">https://realm.io</a></p>
+<p>启用步骤:第一步,使用gradle来引入realm-android<br>第二步,新建JavaBean实现RealmModel接口.<br>第三步,CRUD操作,<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Obtain a Realm instance</span></span><br><span class="line">Realm realm = Realm.getDefaultInstance();</span><br><span class="line"></span><br><span class="line">realm.beginTransaction();</span><br><span class="line"></span><br><span class="line"><span class="comment">//... add or update objects here ...</span></span><br><span class="line">User user = realm.createObject(User.class);</span><br><span class="line"></span><br><span class="line">realm.commitTransaction();</span><br><span class="line"><span class="comment">//or cancel</span></span><br><span class="line"><span class="comment">//realm.cancelTransaction();</span></span><br></pre></td></tr></table></figure></p>
+<p>relam支持链式查询和Auto-Updating Results</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RealmResults&lt;User&gt; teenagers = realm.where(User.class).between(<span class="string">"age"</span>, <span class="number">13</span>, <span class="number">20</span>).findAll();</span><br><span class="line">User firstJohn = teenagers.where().equalTo(<span class="string">"name"</span>, <span class="string">"John"</span>).findFirst();</span><br></pre></td></tr></table></figure>
+<p>需要注意的是,在使用完毕后需要关闭 Realm 实例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Realm realm;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Looper.prepare();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            realm = Realm.getDefaultInstance();</span><br><span class="line">            <span class="comment">//... Setup the handlers using the Realm instance ...</span></span><br><span class="line">            Lopper.loop();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (realm != <span class="keyword">null</span>) &#123;</span><br><span class="line">                realm.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用Relam还有一个好处就是可以结合当下比较流行的Rxjava和Retrofit来使用,其原生提供了很好的支持,截止目前已经出了1.0.0版本,但是仍有诸多限制,及JavaBean的不自由.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/orm/" rel="tag">#orm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/30/ioc_di/" rel="next" title="Java依赖注入（控制反转）">
+                <i class="fa fa-chevron-left"></i> Java依赖注入（控制反转）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/04/hexoblog/" rel="prev" title="github pages ＋ hexo ＋ next搭建个人博客">
+                github pages ＋ hexo ＋ next搭建个人博客 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="bobomee" />
+          <p class="site-author-name" itemprop="name">bobomee</p>
+          <p class="site-description motion-element" itemprop="description">Android开发和学习笔记</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OrmLite"><span class="nav-number">2.</span> <span class="nav-text">OrmLite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SugarORM"><span class="nav-number">3.</span> <span class="nav-text">SugarORM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GreenDAO"><span class="nav-number">4.</span> <span class="nav-text">GreenDAO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ActiveAndroid"><span class="nav-number">5.</span> <span class="nav-text">ActiveAndroid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Realm"><span class="nav-number">6.</span> <span class="nav-text">Realm</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bobomee</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
