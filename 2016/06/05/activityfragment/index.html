@@ -90,12 +90,12 @@
 <meta property="og:url" content="http://yoursite.com/2016/06/05/activityfragment/index.html">
 <meta property="og:site_name" content="BoBoMEe">
 <meta property="og:description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。">
-<meta property="og:image" content="https://github.com/BoBoMEe/AndroidDev/raw/activityfragment/activityfragment/activityfragment.png">
-<meta property="og:updated_time" content="2016-06-12T05:11:47.000Z">
+<meta property="og:image" content="http://img.blog.csdn.net/20160612215028767">
+<meta property="og:updated_time" content="2016-06-12T14:02:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用观察者模式完美解决activity与fragment通信问题">
 <meta name="twitter:description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。">
-<meta name="twitter:image" content="https://github.com/BoBoMEe/AndroidDev/raw/activityfragment/activityfragment/activityfragment.png">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160612215028767">
 
 
 
@@ -291,7 +291,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//触发事件，并获得返回值</span></span><br><span class="line">Object notify = ObservableManager.newInstance()</span><br><span class="line">        .notify(MainActivity.FUNCTION_WITH_PARAM_AND_RESULT, <span class="string">"我是fragment传到activity的参数1"</span>, fragmentActivity,</span><br><span class="line">            fragmentResult);</span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//事件执行，实现于Function接口</span></span><br><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Object <span class="title">function</span><span class="params">(Object[] data)</span> </span>&#123;</span><br><span class="line">   String text = activityResult.getText().toString() + <span class="string">"\n\n\n"</span>;</span><br><span class="line"></span><br><span class="line">   activityResult.setText(text + <span class="string">"fragment调用我成功,获取到参数 :"</span> + Arrays.asList(data));</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="string">"我是activity的返回结果"</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <p>最终效果:</p>
-<p><img src="https://github.com/BoBoMEe/AndroidDev/raw/activityfragment/activityfragment/activityfragment.png" alt="效果图"></p>
+<p><img src="http://img.blog.csdn.net/20160612215028767" alt="activityfragment"></p>
 <p>示例代码：<a href="https://github.com/BoBoMEe/AndroidDev/tree/activityfragment/activityfragment" target="_blank" rel="external">ActivityFragment</a></p>
 
       
