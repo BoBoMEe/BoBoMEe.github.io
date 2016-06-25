@@ -1,0 +1,579 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="自定义控件," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="概述在开发过程中,当系统提供的控件不能满足我们的需求的时候,通常都会采用自定义控件来完成,自定义控件的一般流程:
+attrs.xml–&amp;gt;onMeasure()–&amp;gt;onLayout(ViewGroup)–&amp;gt;onDraw()–&amp;gt;onTouchEvent()–&amp;gt;onInterceptTouchEvent(ViewGroup);
+其中带有ViewGroup的是自定义ViewG">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android自定义控件细节">
+<meta property="og:url" content="http://yoursite.com/2016/06/25/customview/index.html">
+<meta property="og:site_name" content="BoBoMEe">
+<meta property="og:description" content="概述在开发过程中,当系统提供的控件不能满足我们的需求的时候,通常都会采用自定义控件来完成,自定义控件的一般流程:
+attrs.xml–&amp;gt;onMeasure()–&amp;gt;onLayout(ViewGroup)–&amp;gt;onDraw()–&amp;gt;onTouchEvent()–&amp;gt;onInterceptTouchEvent(ViewGroup);
+其中带有ViewGroup的是自定义ViewG">
+<meta property="og:updated_time" content="2016-06-25T23:33:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android自定义控件细节">
+<meta name="twitter:description" content="概述在开发过程中,当系统提供的控件不能满足我们的需求的时候,通常都会采用自定义控件来完成,自定义控件的一般流程:
+attrs.xml–&amp;gt;onMeasure()–&amp;gt;onLayout(ViewGroup)–&amp;gt;onDraw()–&amp;gt;onTouchEvent()–&amp;gt;onInterceptTouchEvent(ViewGroup);
+其中带有ViewGroup的是自定义ViewG">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android自定义控件细节 | BoBoMEe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BoBoMEe</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">好好学习，天天向上</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android自定义控件细节
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-25T11:48:32+08:00" content="Jun 25 2016">
+              Jun 25 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在开发过程中,当系统提供的控件不能满足我们的需求的时候,通常都会采用自定义控件来完成,自定义控件的一般流程:</p>
+<p>attrs.xml–&gt;onMeasure()–&gt;onLayout(ViewGroup)–&gt;onDraw()–&gt;onTouchEvent()–&gt;onInterceptTouchEvent(ViewGroup);</p>
+<p>其中带有ViewGroup的是自定义ViewGroup需要用到的方法.<br><a id="more"></a></p>
+<h2 id="自定义属性"><a href="#自定义属性" class="headerlink" title="自定义属性"></a>自定义属性</h2><p>自定义属性,一般定义用户可自定义的一些特性,关于自定义属性的声明和获取,网上的讲解也比较多了,之前关于自定义属性的总结<a href="http://blog.csdn.net/wbwjx/article/details/50583812" target="_blank" rel="external">Android 自定义属性解析</a>,主要步骤:<br>在values目录下声明相关属性,在自定义控件的构造方法中获取这些属性,应用到自定义控件中.</p>
+<h2 id="onMeasure"><a href="#onMeasure" class="headerlink" title="onMeasure"></a>onMeasure</h2><p>onMeasure即测量,测量自定义控件的大小.测量的值是由两部分决定的[Mode和Size],Mode和Size都封装到了一个叫做MeasureSpec的类中;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">measureWidth</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">int</span> result;</span><br><span class="line">   <span class="keyword">int</span> mode = MeasureSpec.getMode(widthMeasureSpec);</span><br><span class="line">   <span class="keyword">int</span> size = MeasureSpec.getSize(widthMeasureSpec);</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (mode == MeasureSpec.EXACTLY) &#123;</span><br><span class="line">     <span class="comment">// 如果是精确的,则直接返回结果,</span></span><br><span class="line">     <span class="comment">// 这种模式通常是我们给View设置了一个值,如:android:layout_width="300dp"</span></span><br><span class="line">     <span class="comment">// 或者 android:layout_width="match_parent",屏幕的宽度</span></span><br><span class="line">     result = size;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     <span class="comment">// MeasureSpec.UNSPECIFIED View的大小没有限制.</span></span><br><span class="line">     <span class="comment">// 通常在ScrollView或者ListView中出现</span></span><br><span class="line">     result = getNeedWidth() + getPaddingLeft() + getPaddingRight();</span><br><span class="line">     <span class="keyword">if</span> (mode == MeasureSpec.AT_MOST) &#123;</span><br><span class="line">       <span class="comment">// 至多不能超过某个值,一般出现在我们设置android:layout_width="wrap_content" 时</span></span><br><span class="line">       <span class="comment">// 设置wrap_content,则View的尺寸由自身内容决定,但最大不能超过父控件的尺寸</span></span><br><span class="line">       <span class="comment">// 这里 即和父控件传入的值 进行比较,取小(最多不能超过size)</span></span><br><span class="line">       result = Math.max(result, size);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> result;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>在得到result 之后需要调用<code>setMeasuredDimension(width,height);</code><br><code>requestLayout();</code>会触发重新测量onMeasure()</p>
+<h2 id="onLayout"><a href="#onLayout" class="headerlink" title="onLayout"></a>onLayout</h2><p>onLayout即布局,决定了ViewGroup中子View的显示位置. View中提供了空实现的onLayout,但自定义View一般不需要管,ViewGroup中的onLayout是抽象的,即必须实现.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span>  <span class="keyword">int</span> childCount = getChildCount();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; childCount; i++) &#123;</span><br><span class="line">      <span class="keyword">final</span> View child = getChildAt(i);</span><br><span class="line">      <span class="keyword">if</span> (child.getVisibility() == GONE)&#123;</span><br><span class="line">        <span class="keyword">continue</span>; <span class="comment">//如果child为GONE,则不需要布局</span></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">int</span> left = caculateChildLeft();<span class="comment">//计算ChildView左上角x坐标</span></span><br><span class="line">      <span class="keyword">int</span> top = caculateChildTop();<span class="comment">//计算ChildView左上角y坐标</span></span><br><span class="line"></span><br><span class="line">      child.layout(left,top,left+childWidth,top+childHeight);<span class="comment">//childWidth 和 childHeight 是child的宽和高</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>尽可能将onMeasure中的一些与Measure无关的操作移动到onLayout中,因为onMeasure在一次自定义控件流程中,可能会执行多次,而onLayout只执行一次.<br><code>requestLayout();</code>会触发重新布局onLayout()</p>
+<h2 id="onDraw"><a href="#onDraw" class="headerlink" title="onDraw"></a>onDraw</h2><p>onDraw决定自定义控件的样子,在onDraw()我们只负责View内容的绘制,<br><br>背景系统已经帮我们绘制好了, 这里主要借助的是Canvas这个类.<br><br>同时在onDraw方法中,我们一般会使用translate,rotate,scale,skew等来实现canvas的变换 <br><br>如果使用了变换操作,我们需要使用save()和restore()来保存于恢复canvas的状态<br><br>如果是自定义ViewGroup一般我们也不需要管onDraw这个方法,draw由子控件自己完成</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line"></span><br><span class="line">   <span class="comment">// allocations per draw cycle.</span></span><br><span class="line">   <span class="keyword">int</span> paddingLeft = getPaddingLeft();</span><br><span class="line">   <span class="keyword">int</span> paddingTop = getPaddingTop();</span><br><span class="line">   <span class="keyword">int</span> paddingRight = getPaddingRight();</span><br><span class="line">   <span class="keyword">int</span> paddingBottom = getPaddingBottom();</span><br><span class="line"></span><br><span class="line">   <span class="keyword">int</span> contentWidth = getWidth() - paddingLeft - paddingRight;</span><br><span class="line">   <span class="keyword">int</span> contentHeight = getHeight() - paddingTop - paddingBottom;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Draw the text.</span></span><br><span class="line">   canvas.drawText(mExampleString, paddingLeft + (contentWidth - mTextWidth) / <span class="number">2</span>,</span><br><span class="line">       paddingTop + (contentHeight + mTextHeight) / <span class="number">2</span>, mTextPaint);</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Draw the example drawable on top of the text.</span></span><br><span class="line">   <span class="keyword">if</span> (mExampleDrawable != <span class="keyword">null</span>) &#123;</span><br><span class="line">     mExampleDrawable.setBounds(paddingLeft, paddingTop, paddingLeft + contentWidth,</span><br><span class="line">         paddingTop + contentHeight);</span><br><span class="line">     mExampleDrawable.draw(canvas);</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><code>postInvalidate();</code>和<code>invalidate();</code>会触发重新绘制onDraw().</p>
+<h2 id="onTouchEvent"><a href="#onTouchEvent" class="headerlink" title="onTouchEvent"></a>onTouchEvent</h2><p>它是在view中定义的一个方法,用于处理传递到view 的手势事件,<br>如果需要有速度检测,则还需要借助VelocityTracker,<br>VelocityTracker通过addMovement()和getXVelocity()及getYVelocity()来获取加速度.进而执行相应的操作.<br>如果需要滚动操作,则需要借助Scroller,<br>使用Scroller,几个比较重要的方法是computeScroll(),scrollTo(),scrollBy()等</p>
+<p>其中涉及到几个常量;</p>
+<ul>
+<li>MotionEvent.ACTION_DOWN: 按下的时候,做一些初始化,赋值操作.</li>
+<li>MotionEvent.ACTION_MOVE: 移动的事件</li>
+<li>MotionEvent.ACTION_UP: 手指抬起时,做一些释放资源,重置变量的操作</li>
+<li>MotionEvent.ACTION_CANCEL:手势释放操作,释放资源,重置变量</li>
+<li>MotionEvent.ACTION_POINTER_DOWN: 多点触控操作,需要借助event.getActionIndex(),getPointerId(actionIndex)等一系列方法</li>
+<li>MotionEvent.ACTION_POINTER_UP:多点触控非最后一个点被释放时执行,这里需要注意的是activePointer才会起作用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">onSecondaryPointerUp</span><span class="params">(MotionEvent ev)</span> </span>&#123;</span><br><span class="line">       <span class="comment">//...</span></span><br><span class="line">       <span class="keyword">final</span> <span class="keyword">int</span> pointerId = ev.getPointerId(pointerIndex);</span><br><span class="line">       <span class="keyword">if</span> (pointerId == mActivePointerId) &#123;</span><br><span class="line">           <span class="comment">// This was our active pointer going up. Choose a new</span></span><br><span class="line">           <span class="comment">// active pointer and adjust accordingly.</span></span><br><span class="line">           <span class="comment">// <span class="doctag">TODO:</span> Make this decision more intelligent.</span></span><br><span class="line">           <span class="keyword">final</span> <span class="keyword">int</span> newPointerIndex = pointerIndex == <span class="number">0</span> ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">           <span class="comment">//...</span></span><br><span class="line">           mActivePointerId = ev.getPointerId(newPointerIndex);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通知父控件不要拦截事件</span></span><br><span class="line"><span class="keyword">final</span> ViewParent parent = getParent();</span><br><span class="line">                    <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        parent.requestDisallowInterceptTouchEvent(<span class="keyword">true</span>);</span><br><span class="line">                    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="onInterceptTouchEvent"><a href="#onInterceptTouchEvent" class="headerlink" title="onInterceptTouchEvent"></a>onInterceptTouchEvent</h2><p>ViewGroup的方法,表示是否拦截事件,其中传递的参数也是MotionEvent,<br>同样包含上面那些常量<br>我们可以在不同时机调用不同的方法来完成逻辑</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/自定义控件/" rel="tag">#自定义控件</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/23/contentprovider/" rel="next" title="android开发之contentprovider">
+                <i class="fa fa-chevron-left"></i> android开发之contentprovider
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="bobomee" />
+          <p class="site-author-name" itemprop="name">bobomee</p>
+          <p class="site-description motion-element" itemprop="description">Android开发和学习笔记</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义属性"><span class="nav-number">2.</span> <span class="nav-text">自定义属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#onMeasure"><span class="nav-number">3.</span> <span class="nav-text">onMeasure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#onLayout"><span class="nav-number">4.</span> <span class="nav-text">onLayout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#onDraw"><span class="nav-number">5.</span> <span class="nav-text">onDraw</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#onTouchEvent"><span class="nav-number">6.</span> <span class="nav-text">onTouchEvent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#onInterceptTouchEvent"><span class="nav-number">7.</span> <span class="nav-text">onInterceptTouchEvent</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bobomee</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
