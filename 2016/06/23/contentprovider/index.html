@@ -1,0 +1,585 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="contentprovider," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="概述ContentProvider（内容提供者）是Android中的四大组件之一。主要用于程序间数据的共享(IPC的一种).它提供了一套完整的机制，允许一个程序访问另一个应用程序,并且保证数据的安全性.我们知道在Android中常见的数据存储方式有sharedpreferences,文件和数据库等,但是数据的访问方式会因为存储方式的不同而不同.而且这些数据只能在应用内使用,而ContentProv">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android开发之contentprovider">
+<meta property="og:url" content="http://yoursite.com/2016/06/23/contentprovider/index.html">
+<meta property="og:site_name" content="BoBoMEe">
+<meta property="og:description" content="概述ContentProvider（内容提供者）是Android中的四大组件之一。主要用于程序间数据的共享(IPC的一种).它提供了一套完整的机制，允许一个程序访问另一个应用程序,并且保证数据的安全性.我们知道在Android中常见的数据存储方式有sharedpreferences,文件和数据库等,但是数据的访问方式会因为存储方式的不同而不同.而且这些数据只能在应用内使用,而ContentProv">
+<meta property="og:updated_time" content="2016-06-25T00:50:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android开发之contentprovider">
+<meta name="twitter:description" content="概述ContentProvider（内容提供者）是Android中的四大组件之一。主要用于程序间数据的共享(IPC的一种).它提供了一套完整的机制，允许一个程序访问另一个应用程序,并且保证数据的安全性.我们知道在Android中常见的数据存储方式有sharedpreferences,文件和数据库等,但是数据的访问方式会因为存储方式的不同而不同.而且这些数据只能在应用内使用,而ContentProv">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> android开发之contentprovider | BoBoMEe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BoBoMEe</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">好好学习，天天向上</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                android开发之contentprovider
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-23T23:45:36+08:00" content="Jun 23 2016">
+              Jun 23 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ContentProvider（内容提供者）是Android中的四大组件之一。主要用于程序间数据的共享(IPC的一种).<br>它提供了一套完整的机制，允许一个程序访问另一个应用程序,并且保证数据的安全性.<br>我们知道在Android中常见的数据存储方式有sharedpreferences,文件和数据库等,但是数据的访问方式会因为存储方式的不同而不同.<br>而且这些数据只能在应用内使用,而ContentProvider提供好了统一了数据的访问方式.</p>
+<h2 id="ContentResolver"><a href="#ContentResolver" class="headerlink" title="ContentResolver"></a>ContentResolver</h2><p>访问内容提供器中共享的数据,需要借助通过ContentResolver,其中context.getContentResolver()方法可以获取到ContentResolver实例,<br>ContentResolver提供了一系列方法来对数据进行CRUD操作.</p>
+<h2 id="URI"><a href="#URI" class="headerlink" title="URI"></a>URI</h2><p>统一资源标识符,结构和HTTP形式的URL是一样的.<br>代表了要操作的数据,每一个ContentProvider都拥有一个公共的URI,不能重复<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;prefix&gt;://&lt;authority&gt;/&lt;data_type&gt;/&lt;id&gt;</span><br></pre></td></tr></table></figure></p>
+<p>其中,<code>&lt;prefix&gt;</code>的值永远为<code>content</code>,不可更改</p>
+<p><code>&lt;authority&gt;</code>唯一标识符,用来定位<code>ContentProvider</code>,一般为自定义Provider的全路径名,保证唯一</p>
+<p><code>&lt;data_type&gt;/&lt;id&gt;</code>代表资源路径,如<code>/person/2</code>代表person表中id为2的数据</p>
+<h2 id="MIME"><a href="#MIME" class="headerlink" title="MIME"></a>MIME</h2><p>用于指定某个扩展名的文件用一种应用程序来打开,如application/pdf,text/css等,Android中的MIME类型有两种</p>
+<ul>
+<li>多条记录<br>vnd.android.cursor.dir/vnd.xxx</li>
+<li>单条记录<br>vnd.android.cursor.item/vnd.xxx</li>
+</ul>
+<p>其中包含类型和子类型,/前面的类型是Android定义好的,不可更改,子类型中vnd.后面的可以随意指定.在使用Intent时，会用到MIME这玩意，根据Mimetype打开符合条件的活动。</p>
+<h2 id="自定义Contentprovider"><a href="#自定义Contentprovider" class="headerlink" title="自定义Contentprovider"></a>自定义Contentprovider</h2><ul>
+<li>继承ContentProvider,并重写其中的一些方法,</li>
+</ul>
+<p>其中OnCreate()方法在Provider初始化的时候执行</p>
+<p>getType（URI uri）用于返回某一URI对应的MIME类型,运行在Binder线程池中</p>
+<p>还有其他一些操作CRUD操作,运行在Binder线程池中</p>
+<ul>
+<li>UriMatcher</li>
+</ul>
+<p>用于冠关联Provider中的自定义URI和URI_CODE,通过addURI（）将相应的Path和Code联系起来,通过match(uri)得到相应的CODE.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//为外部程序准备好一个所有地址匹配集合</span></span><br><span class="line"><span class="keyword">static</span>&#123;</span><br><span class="line">      uriMatcher = <span class="keyword">new</span> UriMatcher(UriMatcher.NO_MATCH);</span><br><span class="line">      uriMatcher.addURI(PROVIDER_NAME, <span class="string">"students"</span>, STUDENTS);</span><br><span class="line">      uriMatcher.addURI(PROVIDER_NAME, <span class="string">"students/#"</span>, STUDENT_ID);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 取得数据的类型,此方法会在系统进行URI的MIME过滤时被调用。</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> String <span class="title">getType</span><span class="params">(Uri uri)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (uriMatcher.match(uri))&#123;</span><br><span class="line">       <span class="comment">/**</span><br><span class="line">       * Get all student records</span><br><span class="line">       */</span></span><br><span class="line">       <span class="keyword">case</span> STUDENTS:</span><br><span class="line">       <span class="keyword">return</span> <span class="string">"vnd.android.cursor.dir/vnd.example.students"</span>;</span><br><span class="line"></span><br><span class="line">       <span class="comment">/**</span><br><span class="line">       * Get a particular student</span><br><span class="line">       */</span></span><br><span class="line">       <span class="keyword">case</span> STUDENT_ID:</span><br><span class="line">       <span class="keyword">return</span> <span class="string">"vnd.android.cursor.item/vnd.example.students"</span>;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">default</span>:</span><br><span class="line">       <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Unsupported URI: "</span> + uri);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ContentUris<br>用于操作Uri路径后面的ID部分</li>
+</ul>
+<p>其中withAppendedId(uri, id)用于为路径加上ID部分：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Uri uri = Uri.parse(<span class="string">"content://com.example.provider.College/students"</span>)  </span><br><span class="line">Uri resultUri = ContentUris.withAppendedId(uri, <span class="number">10</span>);   </span><br><span class="line"><span class="comment">//生成后的Uri为：content://com.example.provider.College/students/10</span></span><br></pre></td></tr></table></figure>
+<p>parseId(uri)方法用于从路径中获取ID部分：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Uri uri = Uri.parse(<span class="string">"content://com.example.provider.College/students/10 "</span>)  </span><br><span class="line"><span class="keyword">long</span> personid = ContentUris.parseId(uri);<span class="comment">//获取的结果为:10</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置清单文件</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;provider</span><br><span class="line">        android:authorities=<span class="string">"com.bobomee.android.contentproviderdemo"</span></span><br><span class="line">        android:name=<span class="string">".BookContentProvider"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="监听ContentProvider变化"><a href="#监听ContentProvider变化" class="headerlink" title="监听ContentProvider变化"></a>监听ContentProvider变化</h2><p>如果ContentProvider的访问者需要知道ContentProvider中的数据发生变化，可以在ContentProvider发生数据变化时调用getContentResolver().notifyChange(uri, null)来通知注册在此URI上的访问者，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Uri insertUri = Uri.withAppendedPath(uri, <span class="string">"/"</span> + rowId);</span><br><span class="line">      Log.i(TAG, <span class="string">"insertUri:"</span>+insertUri.toString());</span><br><span class="line">      <span class="comment">//发出数据变化通知(book表的数据发生变化)</span></span><br><span class="line">      getContext().getContentResolver().notifyChange(uri, <span class="keyword">null</span>);</span><br><span class="line">      <span class="keyword">return</span> insertUri;</span><br></pre></td></tr></table></figure>
+<p>参考文章:</p>
+<p><a href="http://blog.csdn.net/xyz_lmn/article/details/7161635" target="_blank" rel="external">ContentProvider和Uri详解</a><br><a href="http://www.tutorialspoint.com/android/android_content_providers.htm" target="_blank" rel="external">Android - Content Providers</a><br><a href="http://www.imooc.com/article/8001" target="_blank" rel="external">我是这样理解Android开发中的contentprovider的</a><br><a href="https://liuzhichao.com/p/562.html" target="_blank" rel="external">Android开发教程：Android数据储存之ContentProvider</a><br><a href="http://codingnow.cn/android/1078.html" target="_blank" rel="external">android ContentProvider使用详解</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/contentprovider/" rel="tag">#contentprovider</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/09/android-mvp-md/" rel="next" title="浅谈Android架构之MVP,MVVM">
+                <i class="fa fa-chevron-left"></i> 浅谈Android架构之MVP,MVVM
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="bobomee" />
+          <p class="site-author-name" itemprop="name">bobomee</p>
+          <p class="site-description motion-element" itemprop="description">Android开发和学习笔记</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentResolver"><span class="nav-number">2.</span> <span class="nav-text">ContentResolver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URI"><span class="nav-number">3.</span> <span class="nav-text">URI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MIME"><span class="nav-number">4.</span> <span class="nav-text">MIME</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义Contentprovider"><span class="nav-number">5.</span> <span class="nav-text">自定义Contentprovider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监听ContentProvider变化"><span class="nav-number">6.</span> <span class="nav-text">监听ContentProvider变化</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bobomee</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
