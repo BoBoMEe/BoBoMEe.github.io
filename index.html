@@ -233,6 +233,179 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/26/recyclerview/" itemprop="url">
+                  Android RecyclerView 使用全解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-26T14:13:36+08:00" content="Jun 26 2016">
+              Jun 26 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>RecyclerView</code>出来已经很长时间了,关于其的介绍也非常的多.作为<code>ListView</code>的升级版,它更加强大和灵活.<br>可以轻松的实现各种布局和动画,见其名,知其意.<code>RecyclerView</code>用于在有限窗口中展示大量数据集合的可复用的视图.<br>这里主要梳理一下<code>Recyclerview</code>的常用方法,示例Demo:<a href="https://github.com/BoBoMEe/AndroidDev/tree/blog/blogcodes/app/src/main/java/com/bobomee/blogdemos/recycler" target="_blank" rel="external">BoBoMEe/AndroidDev</a></p>
+<h2 id="相关类"><a href="#相关类" class="headerlink" title="相关类"></a>相关类</h2><p><code>RecyclerView</code>的灵活性,主要体现在各个类的职责分离上,<br><code>RecyclerView</code>不负责子View的展示与布局,只负责子view的回收与复用.其他的比如,子View的布局,装饰及动画都交由其他类来处理.</p>
+<p><code>RecyclerView</code>相关类及其作用</p>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th style="text-align:center">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RecyclerView.ViewHolder</td>
+<td style="text-align:center">装载子view数据的容器</td>
+</tr>
+<tr>
+<td>RecyclerView.LayoutManager</td>
+<td style="text-align:center">布局管理器,负责子View的布局</td>
+</tr>
+<tr>
+<td>RecyclerView.Adapter</td>
+<td style="text-align:center">适配器,负责处理数据与绑定视图</td>
+</tr>
+<tr>
+<td>RecyclerView.ItemDecoration</td>
+<td style="text-align:center">装饰子view,如分割线、偏移等</td>
+</tr>
+<tr>
+<td>RecyclerView.ItemAnimator</td>
+<td style="text-align:center">子view改变时的动画</td>
+</tr>
+</tbody>
+</table>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p><code>RecyclerView</code>最简单的使用需要设置<code>LayoutManager</code>和<code>Adapter</code>,其他的都是可选项.简单使用流程可分为以下几步.</p>
+<ul>
+<li>引入</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compile <span class="string">'com.android.support:recyclerview-v7:23.4.0'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">android.support.v7.widget.RecyclerView</span></span><br><span class="line">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/recycler_view"</span></span><br><span class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span><br><span class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span><br><span class="line">    <span class="attr">android:padding</span>=<span class="string">"@dimen/item_margin"</span></span><br><span class="line">    <span class="attr">android:clipToPadding</span>=<span class="string">"false"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>设置<code>Adapter</code>和<code>LayoutManager</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);</span><br><span class="line"></span><br><span class="line">mLinearLayoutManager = <span class="keyword">new</span> LinearLayoutManager(<span class="keyword">this</span>);</span><br><span class="line">mRecyclerView.setLayoutManager(mLinearLayoutManager);</span><br><span class="line"></span><br><span class="line">mRecyclerStringAdapter = <span class="keyword">new</span> RecyclerStringAdapter(Datas.getDatas());</span><br><span class="line">mRecyclerView.setAdapter(mRecyclerStringAdapter);</span><br></pre></td></tr></table></figure>
+<p>其中<code>LinearLayoutManager</code>代表线性显示.默认是方向为<code>VERTICAL</code>,<code>LayoutManager</code>抽象类有三个官方实现版本,分别是<code>LinearLayoutManager</code>(线性布局),<code>GridLayoutManager</code>(网格布局),<code>StaggeredGridLayoutManager</code>(瀑布流布局).</p>
+<ul>
+<li><code>Adapter</code></li>
+</ul>
+<p>不同于<code>ListView</code>的<code>Adapter</code>,<code>Recyclerview</code>的适配器强制使用<code>ViewHolder</code>模式.如下一个简单的<code>Adapter</code>实现</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class RecyclerStringAdapter extends RecyclerView.Adapter&lt;RecyclerViewholder&gt; &#123;</span><br><span class="line"></span><br><span class="line">  List&lt;String&gt; datas;</span><br><span class="line">  public RecyclerStringAdapter(List&lt;String&gt; datas) &#123;</span><br><span class="line">    this.datas = datas;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @Override public void onBindViewHolder(RecyclerViewholder holder, int position) &#123;</span><br><span class="line">    holder.textView.setText(datas.get(position));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @Override public RecyclerViewholder onCreateViewHolder(ViewGroup parent, int viewType) &#123;</span><br><span class="line"></span><br><span class="line">   View view =</span><br><span class="line">       LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);</span><br><span class="line"></span><br><span class="line">   return new RecyclerViewholder(view);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> @Override public int getItemCount() &#123;</span><br><span class="line">    return datas.size();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># RecyclerViewholder</span><br><span class="line">public class RecyclerViewholder extends RecyclerView.ViewHolder &#123;</span><br><span class="line"></span><br><span class="line">  public TextView textView;</span><br><span class="line"></span><br><span class="line">  public RecyclerViewholder(View itemView) &#123;</span><br><span class="line">    super(itemView);</span><br><span class="line">    textView = (TextView) itemView.findViewById(R.id.text);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="其他用法"><a href="#其他用法" class="headerlink" title="其他用法"></a>其他用法</h2><ul>
+<li><code>LayoutManager</code>布局切换</li>
+</ul>
+<p>我们知道<code>LayoutManager</code>主要负责子View的布局.通过设置不同的<code>LayoutManager</code>即可实现展现方式的改变.<br>如果不设置<code>LayoutManager</code>,数据将不会展现出来.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//gridview的列数为3,orientation = VERTICAL</span></span><br><span class="line">mGridLayoutManager = <span class="keyword">new</span> GridLayoutManager(<span class="keyword">this</span>, <span class="number">3</span>);</span><br><span class="line">mRecyclerView.setLayoutManager(mGridLayoutManager);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 瀑布流的列数为3,orientation = VERTICAL</span></span><br><span class="line">mStaggeredGridLayoutManager =</span><br><span class="line">        <span class="keyword">new</span> StaggeredGridLayoutManager(<span class="number">3</span>, StaggeredGridLayoutManager.VERTICAL);</span><br><span class="line">mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> orientation = mLinearLayoutManager.getOrientation();</span><br><span class="line">mLinearLayoutManager.setOrientation(orientation == LinearLayoutManager.VERTICAL ? LinearLayoutManager.HORIZONTAL: LinearLayoutManager.VERTICAL);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>LayoutManager</code>常用方法</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//返回当前第一个可见 Item 的 position</span></span><br><span class="line">findFirstVisibleItemPosition()</span><br><span class="line"><span class="comment">//返回当前第一个完全可见 Item 的 position</span></span><br><span class="line">findFirstCompletelyVisibleItemPosition()</span><br><span class="line"><span class="comment">//返回当前最后一个可见 Item 的 position</span></span><br><span class="line">findLastVisibleItemPosition()</span><br><span class="line"><span class="comment">//返回当前最后一个完全可见 Item 的 position.</span></span><br><span class="line">findLastCompletelyVisibleItemPosition()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>ItemAnimator</code>Item动画</li>
+</ul>
+<p>用于设置子view的添加、移动、删除的相关动画效果.官方默认提供了一个<code>DefaultItemAnimator</code>,如果我们没有设置<code>ItemAnimator</code>,则默认就是<code>DefaultItemAnimator</code>,<code>Recyclerview.Adapter</code>提供了<code>notifyDataSetChanged()</code>、<code>notifyItemInserted(index)</code>、 <code>notifyItemRemoved(position)</code>、 <code>notifyItemChanged(position)</code>方法来刷新<code>Recyclerview</code>.这里可以看一下<a href="https://github.com/wasabeef/recyclerview-animators" target="_blank" rel="external">wasabeef/recyclerview-animators</a>:实现了多种<code>Recyclerview</code>的Item动画</p>
+<ul>
+<li><code>ItemDecoration</code>Item装饰</li>
+</ul>
+<p>通过<code>mRecyclerView.addItemDecoration(new MarginDecoration(this));</code>来给Item添加装饰,</p>
+<p><code>ItemDecoration</code>可以叠加,<code>Recyclerview</code>展示的时候会遍历所有的<code>ItemDecoration</code>并调用其绘制方法来对Item进行装饰.</p>
+<p><code>ItemDecoration</code>提供了三个方法用于定制装饰器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在Item条目绘制之前调用,如果不是指offset则被Item的内容所遮挡</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas c, RecyclerView parent)</span></span>;</span><br><span class="line"><span class="comment">// 在Item条目绘制之后调用,浮于Item之上</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDrawOver</span><span class="params">(Canvas c, RecyclerView parent)</span></span>;</span><br><span class="line"><span class="comment">// 计算并设置Item偏移量</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getItemOffsets</span><span class="params">(Rect outRect, <span class="keyword">int</span> itemPosition, RecyclerView parent)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="Recyclerview多种布局"><a href="#Recyclerview多种布局" class="headerlink" title="Recyclerview多种布局"></a>Recyclerview多种布局</h2><p>在<code>ListView</code>中为了实现多种布局,我们需要重写<code>Adapter</code>中的 <code>getItemViewType</code>和<code>getViewTypeCount</code>方法<br>而在<code>Recyclerview</code>中保留了<code>getItemViewType</code>方法,同时我们可以在<code>onCreateViewHolder</code>中根据不同的<code>ViewType</code>来创建不同的<code>Holder</code><br>这里可以看一下<a href="https://github.com/hongyangAndroid/baseAdapter" target="_blank" rel="external">hongyangAndroid/baseAdapter</a>:万能的Adapter for ListView,RecyclerView,GridView<br>其中关于<code>HeaderView</code>及<code>FooterwView</code>的处理,同样也是通过<code>ViewType</code>来实现的,<br>在网格布局中,依靠了<code>GridLayoutManager#setSpanSizeLookup</code>方法来设置每个Item占多少个span,<br>在瀑布流不居中,通过给<code>StaggeredGridLayoutManager.LayoutParams</code>设置<code>setFullSpan(true);</code>来占满一行.</p>
+<h2 id="ItemTouchHelper"><a href="#ItemTouchHelper" class="headerlink" title="ItemTouchHelper"></a>ItemTouchHelper</h2><p>用于<code>Recyclerview</code>的触摸辅助操作,比如选中,移动,删除等事件的监听.<br>这里可以看一下: <a href="http://www.devtf.cn/?p=795" target="_blank" rel="external">可拖拽的RecyclerView</a>,通过跟踪代码我们可以看到,<code>ItemTouchHelper</code>内部<br>主要是通过<code>GestureDetectorCompat</code>来处理触摸事件,并通过给<code>Recyclerview</code>设置<code>OnItemTouchListener</code>来实现效果<br>但是遗憾的是其中只 实现了<code>onLongPress</code>的监听.但是为我们设置<code>Recyclerview</code>的Item监听提供了一种新的思路</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ItemTouchHelper#ItemTouchHelperGestureListener</span></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemTouchHelperGestureListener</span> <span class="keyword">extends</span> <span class="title">GestureDetector</span>.<span class="title">SimpleOnGestureListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onDown</span><span class="params">(MotionEvent e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLongPress</span><span class="params">(MotionEvent e)</span> </span>&#123;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过<code>ItemTouchHelper</code>实现<code>Recyclerview</code>的<code>Click</code>,<code>LongClick</code>,<code>Select</code>,<code>Swipe</code>,<code>Drag</code>等效果,<br>主要通过一个叫做<code>ItemTouchHelper.Callback</code>的类,示例:<a href="https://github.com/BoBoMEe/AndroidDev/blob/blog/blogcodes/app/src/main/java/com/bobomee/blogdemos/recycler/helper/RvItemTouchHelperCallback.java" target="_blank" rel="external">RvItemTouchHelperCallback</a></p>
+<h2 id="Recyclerview-选中模式"><a href="#Recyclerview-选中模式" class="headerlink" title="Recyclerview 选中模式"></a>Recyclerview 选中模式</h2><p>遗憾的是<code>Recyclerview</code>并不像<code>Listview</code>那样提供<code>selectMode</code>,但是在我们最初不适用<code>selectMode</code>的时候,我们是否采用过一种通过刷新<code>Adapter</code>来实现的方式呢<br>在<code>Recyclerview</code>中要实现选中模式,我们当然也要从<code>Adapter</code>下手,这里可以看一下<a href="http://shawn-duan.com/android/recyclerview/2016/06/14/Multi-Selection-Mode-for-RecyclerView/" target="_blank" rel="external">Multi-Selection Mode for RecyclerView</a><br>其中的核心代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> SparseBooleanArray mSelectedItems;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">switchSelectedState</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (mSelectedItems.get(position)) &#123;       <span class="comment">// item has been selected, de-select it.</span></span><br><span class="line">          mSelectedItems.delete(position);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          mSelectedItems.put(position, <span class="keyword">true</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      notifyItemChanged(position);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clearSelectedState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      List&lt;Integer&gt; selection = getSelectedItems();</span><br><span class="line">      mSelectedItems.clear();</span><br><span class="line">      <span class="keyword">for</span> (Integer i : selection) &#123;</span><br><span class="line">          notifyItemChanged(position);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到作者也是通过在<code>Adapter</code>中维护一个选中的集合来实现<code>Recyclerview</code>的选中模式的,</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>Recyclerview</code>不仅在灵活度和扩展性上都较<code>AbsListView</code>好,在项目中也得到了大量的使用,也还有大量的未知方法等着去实践,<br>比如<code>Recyclerview</code>的<code>Scroll</code>操作,<code>RecycledViewPool</code>.<code>Recyclerview</code>的上下拉刷新,<br>自定义<code>LayoutManager</code>、<code>itemDecoration</code>、<code>itemAnimator</code>等待</p>
+<p>参考:<br><a href="http://blog.csdn.net/lmj623565791/article/details/45059587" target="_blank" rel="external"> Android RecyclerView 使用完全解析 体验艺术般的控件</a><br><a href="http://www.devtf.cn/?p=795" target="_blank" rel="external">可拖拽的RecyclerView</a><br><a href="http://shawn-duan.com/android/recyclerview/2016/06/14/Multi-Selection-Mode-for-RecyclerView/" target="_blank" rel="external">Multi-Selection Mode for RecyclerView</a><br><a href="https://guides.codepath.com/android/using-the-recyclerview" target="_blank" rel="external">Using the RecyclerView</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/25/customview/" itemprop="url">
                   Android自定义控件细节
                 </a>
@@ -1090,103 +1263,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/20/androidorm/" itemprop="url">
-                  快速开发之Android Orm总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-20T22:02:00+08:00" content="Apr 20 2016">
-              Apr 20 2016
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在android平台上，常用的数据保存方式有Preference，文件和数据库，针对于数据库操作，<br>一般都会采用orm框架来解决问题，Android中使用比较广泛的Orm有LiteOrm,OrmLite，SugarORM，GreenDAO，ActiveAndroid，Realm等</p>
-<p>AndroidOrm使用的小demo:<a href="https://github.com/BoBoMEe/AndroidDev/tree/orm">AndroidOrm</a></p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/20/androidorm/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1232,7 +1308,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1242,7 +1318,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
