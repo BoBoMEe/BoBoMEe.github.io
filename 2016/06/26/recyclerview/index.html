@@ -84,19 +84,16 @@
 
 
 
-<meta name="description" content="概述RecyclerView出来已经很长时间了,关于其的介绍也非常的多.作为ListView的升级版,它更加强大和灵活.可以轻松的实现各种布局和动画,见其名,知其意.RecyclerView用于在有限窗口中展示大量数据集合的可复用的视图.这里主要梳理一下Recyclerview的常用方法,示例Demo:BoBoMEe/AndroidDev
-相关类RecyclerView的灵活性,主要体现在各个类的">
+<meta name="description" content="概述RecyclerView出来已经很长时间了,关于其的介绍也非常的多.作为ListView的升级版,它更加强大和灵活.可以轻松的实现各种布局和动画,见其名,知其意.RecyclerView用于在有限窗口中展示大量数据集合的可复用的视图.这里主要梳理一下Recyclerview的常用方法,示例Demo:BoBoMEe/AndroidDev">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android RecyclerView 使用全解析">
 <meta property="og:url" content="http://yoursite.com/2016/06/26/recyclerview/index.html">
 <meta property="og:site_name" content="BoBoMEe">
-<meta property="og:description" content="概述RecyclerView出来已经很长时间了,关于其的介绍也非常的多.作为ListView的升级版,它更加强大和灵活.可以轻松的实现各种布局和动画,见其名,知其意.RecyclerView用于在有限窗口中展示大量数据集合的可复用的视图.这里主要梳理一下Recyclerview的常用方法,示例Demo:BoBoMEe/AndroidDev
-相关类RecyclerView的灵活性,主要体现在各个类的">
-<meta property="og:updated_time" content="2016-07-26T15:30:22.000Z">
+<meta property="og:description" content="概述RecyclerView出来已经很长时间了,关于其的介绍也非常的多.作为ListView的升级版,它更加强大和灵活.可以轻松的实现各种布局和动画,见其名,知其意.RecyclerView用于在有限窗口中展示大量数据集合的可复用的视图.这里主要梳理一下Recyclerview的常用方法,示例Demo:BoBoMEe/AndroidDev">
+<meta property="og:updated_time" content="2016-07-26T15:31:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android RecyclerView 使用全解析">
-<meta name="twitter:description" content="概述RecyclerView出来已经很长时间了,关于其的介绍也非常的多.作为ListView的升级版,它更加强大和灵活.可以轻松的实现各种布局和动画,见其名,知其意.RecyclerView用于在有限窗口中展示大量数据集合的可复用的视图.这里主要梳理一下Recyclerview的常用方法,示例Demo:BoBoMEe/AndroidDev
-相关类RecyclerView的灵活性,主要体现在各个类的">
+<meta name="twitter:description" content="概述RecyclerView出来已经很长时间了,关于其的介绍也非常的多.作为ListView的升级版,它更加强大和灵活.可以轻松的实现各种布局和动画,见其名,知其意.RecyclerView用于在有限窗口中展示大量数据集合的可复用的视图.这里主要梳理一下Recyclerview的常用方法,示例Demo:BoBoMEe/AndroidDev">
 
 
 
@@ -275,6 +272,7 @@
 
       
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>RecyclerView</code>出来已经很长时间了,关于其的介绍也非常的多.作为<code>ListView</code>的升级版,它更加强大和灵活.<br>可以轻松的实现各种布局和动画,见其名,知其意.<code>RecyclerView</code>用于在有限窗口中展示大量数据集合的可复用的视图.<br>这里主要梳理一下<code>Recyclerview</code>的常用方法,示例Demo:<a href="https://github.com/BoBoMEe/AndroidDev/tree/blog/blogcodes/app/src/main/java/com/bobomee/blogdemos/recycler" target="_blank" rel="external">BoBoMEe/AndroidDev</a></p>
+<a id="more"></a>
 <h2 id="相关类"><a href="#相关类" class="headerlink" title="相关类"></a>相关类</h2><p><code>RecyclerView</code>的灵活性,主要体现在各个类的职责分离上,<br><code>RecyclerView</code>不负责子View的展示与布局,只负责子view的回收与复用.其他的比如,子View的布局,装饰及动画都交由其他类来处理.</p>
 <p><code>RecyclerView</code>相关类及其作用</p>
 <table>
