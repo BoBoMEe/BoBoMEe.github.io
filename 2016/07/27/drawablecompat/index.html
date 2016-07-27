@@ -84,14 +84,12 @@
 
 
 
-<meta name="description" content="概述看到 Android Weekly 最新一期有一篇文章：Tinting drawables，使用 ColorFilter 手动打造了一个 TintBitmapDrawable，之前也看到有些文章使用这种方式来实现 Drawable 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。
-解决方案其实在 Android Support V4 的包中提供了 Drawab">
+<meta name="description" content="概述看到 Android Weekly 最新一期有一篇文章：Tinting drawables，使用 ColorFilter 手动打造了一个 TintBitmapDrawable，之前也看到有些文章使用这种方式来实现 Drawable 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Drawable 着色的后向兼容方案">
 <meta property="og:url" content="http://yoursite.com/2016/07/27/drawablecompat/index.html">
 <meta property="og:site_name" content="BoBoMEe">
-<meta property="og:description" content="概述看到 Android Weekly 最新一期有一篇文章：Tinting drawables，使用 ColorFilter 手动打造了一个 TintBitmapDrawable，之前也看到有些文章使用这种方式来实现 Drawable 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。
-解决方案其实在 Android Support V4 的包中提供了 Drawab">
+<meta property="og:description" content="概述看到 Android Weekly 最新一期有一篇文章：Tinting drawables，使用 ColorFilter 手动打造了一个 TintBitmapDrawable，之前也看到有些文章使用这种方式来实现 Drawable 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。">
 <meta property="og:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-edittext.jpg">
 <meta property="og:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/ic_account_balance_black_24dp.png">
 <meta property="og:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-bitmap-error.png">
@@ -100,11 +98,10 @@
 <meta property="og:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-bitmap-mutate.png">
 <meta property="og:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-edittext-1.jpg">
 <meta property="og:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-edittext-2.png">
-<meta property="og:updated_time" content="2016-07-27T14:31:31.000Z">
+<meta property="og:updated_time" content="2016-07-27T14:33:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Drawable 着色的后向兼容方案">
-<meta name="twitter:description" content="概述看到 Android Weekly 最新一期有一篇文章：Tinting drawables，使用 ColorFilter 手动打造了一个 TintBitmapDrawable，之前也看到有些文章使用这种方式来实现 Drawable 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。
-解决方案其实在 Android Support V4 的包中提供了 Drawab">
+<meta name="twitter:description" content="概述看到 Android Weekly 最新一期有一篇文章：Tinting drawables，使用 ColorFilter 手动打造了一个 TintBitmapDrawable，之前也看到有些文章使用这种方式来实现 Drawable 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。">
 <meta name="twitter:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-edittext.jpg">
 
 
@@ -284,6 +281,7 @@
 
       
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>看到 <a href="http://androidweekly.net/" target="_blank" rel="external">Android Weekly</a> 最新一期有一篇文章：<a href="http://andraskindler.com/blog/2015/tinting_drawables/" target="_blank" rel="external">Tinting drawables</a>，使用 <code>ColorFilter</code> 手动打造了一个 <code>TintBitmapDrawable</code>，之前也看到有些文章使用这种方式来实现 <code>Drawable</code> 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。</p>
+<a id="more"></a>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>其实在 <code>Android Support V4</code> 的包中提供了 <code>DrawableCompat</code> 类，我们很容易写出如下的辅助方法来实现 <code>Drawable</code> 的着色，如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Drawable <span class="title">tintDrawable</span><span class="params">(Drawable drawable, ColorStateList colors)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Drawable wrappedDrawable = DrawableCompat.wrap(drawable);</span><br><span class="line">    DrawableCompat.setTintList(wrappedDrawable, colors);</span><br><span class="line">    <span class="keyword">return</span> wrappedDrawable;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>使用例子：</p>
