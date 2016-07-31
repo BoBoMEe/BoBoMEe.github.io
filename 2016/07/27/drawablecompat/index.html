@@ -86,7 +86,7 @@
 
 <meta name="description" content="概述看到 Android Weekly 最新一期有一篇文章：Tinting drawables，使用 ColorFilter 手动打造了一个 TintBitmapDrawable，之前也看到有些文章使用这种方式来实现 Drawable 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Drawable 着色的后向兼容方案">
+<meta property="og:title" content="ditText 背景,光标着色及其原理解析">
 <meta property="og:url" content="http://yoursite.com/2016/07/27/drawablecompat/index.html">
 <meta property="og:site_name" content="BoBoMEe">
 <meta property="og:description" content="概述看到 Android Weekly 最新一期有一篇文章：Tinting drawables，使用 ColorFilter 手动打造了一个 TintBitmapDrawable，之前也看到有些文章使用这种方式来实现 Drawable 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。">
@@ -98,9 +98,9 @@
 <meta property="og:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-bitmap-mutate.png">
 <meta property="og:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-edittext-1.jpg">
 <meta property="og:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-edittext-2.png">
-<meta property="og:updated_time" content="2016-07-27T14:33:53.000Z">
+<meta property="og:updated_time" content="2016-07-30T10:08:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Drawable 着色的后向兼容方案">
+<meta name="twitter:title" content="ditText 背景,光标着色及其原理解析">
 <meta name="twitter:description" content="概述看到 Android Weekly 最新一期有一篇文章：Tinting drawables，使用 ColorFilter 手动打造了一个 TintBitmapDrawable，之前也看到有些文章使用这种方式来实现 Drawable 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。">
 <meta name="twitter:image" content="http://7rf9ir.com1.z0.glb.clouddn.com/tint-edittext.jpg">
 
@@ -120,7 +120,7 @@
   };
 </script>
 
-  <title> Drawable 着色的后向兼容方案 | BoBoMEe </title>
+  <title> ditText 背景,光标着色及其原理解析 | BoBoMEe </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -240,7 +240,7 @@
             
             
               
-                Drawable 着色的后向兼容方案
+                ditText 背景,光标着色及其原理解析
               
             
           </h1>
@@ -376,6 +376,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2016/07/31/rx_retrofit/" rel="prev" title="使用Rxjava+Retrofit开发的封装技巧">
+                使用Rxjava+Retrofit开发的封装技巧 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -442,7 +446,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -452,7 +456,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
