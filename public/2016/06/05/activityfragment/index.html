@@ -1,0 +1,667 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="BoBoMEe" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用观察者模式完美解决activity与fragment通信问题">
+<meta property="og:url" content="http://bobomee.github.io/2016/06/05/activityfragment/index.html">
+<meta property="og:site_name" content="BoBoMEe">
+<meta property="og:description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。">
+<meta property="og:image" content="http://img.blog.csdn.net/20160612215028767">
+<meta property="og:updated_time" content="2016-06-12T14:02:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用观察者模式完美解决activity与fragment通信问题">
+<meta name="twitter:description" content="概述通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160612215028767">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 使用观察者模式完美解决activity与fragment通信问题 | BoBoMEe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0f3a06bb8dcc1e584e3c624ccf8c8e02";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BoBoMEe</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">好好学习，天天向上</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用观察者模式完美解决activity与fragment通信问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-05T09:07:46+08:00" content="Jun 5 2016">
+              Jun 5 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/05/activityfragment/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/06/05/activityfragment/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，<br>handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。</p>
+<a id="more"></a>
+<h2 id="handler方式"><a href="#handler方式" class="headerlink" title="handler方式"></a>handler方式</h2><p>这是一种最不好的初级方式，在fragment中调用activity中的handler发送信息，activity处理信息。缺点也十分明显，耦合性极强，并且获取不了activity的反馈，总之体验十分不好。</p>
+<h2 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h2><p>这是一种另类的玩法，个人感觉大材小用了。广播适用于一对多且接收者不明确的情况下，<br>而且广播传播的信息需要实现序列化借口，总之是一种耗费性能的方式。</p>
+<h2 id="EvnetBus"><a href="#EvnetBus" class="headerlink" title="EvnetBus"></a>EvnetBus</h2><p>EvnetBus作为一款事件总线存在，可以用于Action的传递，但是这种方式的缺点有：是用反射（对性能有影响），EvnetBus发送者和接受者分离严重，不好维护，且不可以获取activity反馈，也不是十分理想。</p>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>之前处理这类问题一直也是适应这种方式，总体来讲还是很不错。但是也有缺点，当项目大了的时候，就需要定义很多的接口，这时候就容易混淆，不好维护。</p>
+<h2 id="新大陆"><a href="#新大陆" class="headerlink" title="新大陆"></a>新大陆</h2><p>总结一下Rx的设计思路，Rx和设计模式中的观察者十分类似。activity和fragment通信，实质上就是所谓事件的传递和响应，只是这个事件是一个特殊的事件，就是可以执行的方法（js中function也可以是参数），那么如果activity需要监听fragment的事件，只需要观察其相应事件即可，fragment同理。</p>
+<p>如果对观察者不熟悉的可以看一下：<a href="http://droidyue.com/blog/2015/06/27/desgign-pattern-observer/" target="_blank" rel="external">这就是观察者模式</a></p>
+<h3 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ObservableInterface</span>&lt;<span class="title">T</span>, <span class="title">P</span>, <span class="title">R</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   * 根据名称注册观察者</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(String name, T observer)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   * 根据名称反注册观察者</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   * 根据观察者反注册</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(T observer)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   * 根据名称和观察者反注册</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(String name, T observer)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   * 根据名称获取观察者</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function">Set&lt;T&gt; <span class="title">getObserver</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   * 清除观察者</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   * 通知观察者</span><br><span class="line">   *</span><br><span class="line">   * <span class="doctag">@param</span> name 名称</span><br><span class="line">   * <span class="doctag">@param</span> p 参数</span><br><span class="line">   * <span class="doctag">@return</span> 返回值</span><br><span class="line">   */</span></span><br><span class="line"></span><br><span class="line">  <span class="function">R <span class="title">notify</span><span class="params">(String name, P... p)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Observer"><a href="#Observer" class="headerlink" title="Observer"></a>Observer</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Function</span>&lt;<span class="title">Result</span>, <span class="title">Param</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function">Result <span class="title">function</span><span class="params">(Param... data)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的Observer就是一个方法的抽象，包含 参数 和 返回值。在Activity和Fragment中传递的就是Fuction，在需要监听的地方注册事件，在适当的地方触发事件。下面看一下Observable的具体实现</p>
+<h3 id="ObservableManager"><a href="#ObservableManager" class="headerlink" title="ObservableManager"></a>ObservableManager</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObservableManager</span>&lt;<span class="title">Param</span>, <span class="title">Result</span>&gt;</span><br><span class="line">    <span class="keyword">implements</span> <span class="title">ObservableInterface</span>&lt;<span class="title">Function</span>, <span class="title">Param</span>, <span class="title">Result</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"ObservableManager"</span>;</span><br><span class="line">  <span class="keyword">private</span> HashMap&lt;String, Set&lt;Function&gt;&gt; _mapping;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Object _lockObj = <span class="keyword">new</span> Object();</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> ObservableManager _instance;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">ObservableManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>._mapping = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ObservableManager <span class="title">newInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (_instance == <span class="keyword">null</span>) _instance = <span class="keyword">new</span> ObservableManager();</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(String name, Function observer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (_lockObj) &#123;</span><br><span class="line">      Set&lt;Function&gt; observers;</span><br><span class="line">      <span class="keyword">if</span> (!_mapping.containsKey(name)) &#123;</span><br><span class="line">        observers = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        _mapping.put(name, observers);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        observers = _mapping.get(name);</span><br><span class="line">      &#125;</span><br><span class="line">      observers.add(observer);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (_lockObj) &#123;</span><br><span class="line">      _mapping.remove(name);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Function observer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (_lockObj) &#123;</span><br><span class="line">      <span class="keyword">for</span> (String key : _mapping.keySet()) &#123;</span><br><span class="line">        Set&lt;Function&gt; observers = _mapping.get(key);</span><br><span class="line">        observers.remove(observer);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(String name, Function observer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (_lockObj) &#123;</span><br><span class="line">      <span class="keyword">if</span> (_mapping.containsKey(name)) &#123;</span><br><span class="line">        Set&lt;Function&gt; observers = _mapping.get(name);</span><br><span class="line">        observers.remove(observer);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Set&lt;Function&gt; <span class="title">getObserver</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    Set&lt;Function&gt; observers = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">synchronized</span> (_lockObj) &#123;</span><br><span class="line">      <span class="keyword">if</span> (_mapping.containsKey(name)) &#123;</span><br><span class="line">        observers = _mapping.get(name);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> observers;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (_lockObj) &#123;</span><br><span class="line">      _mapping.clear();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Result <span class="title">notify</span><span class="params">(String name, Param... param)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (_lockObj) &#123;</span><br><span class="line">      <span class="keyword">if</span> (_mapping.containsKey(name)) &#123;</span><br><span class="line">        Set&lt;Function&gt; observers = _mapping.get(name);</span><br><span class="line">        <span class="keyword">for</span> (Function o : observers) &#123;</span><br><span class="line">          <span class="keyword">return</span> (Result) o.function(param);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里才用了一个HashMap来存储所有Observer集合，触发事件后就轮询集合循序之行，这就是观察者其中之一的缺点，一个Observer可能阻塞，影响其他执行。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>Activity中注册Function事件，Fragment中出发Function事件，执行的到结果，反之亦然。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注册事件,Activity实现Function接口</span></span><br><span class="line">ObservableManager.newInstance().registerObserver(FUNCTION_WITH_PARAM_AND_RESULT, <span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//触发事件，并获得返回值</span></span><br><span class="line">Object notify = ObservableManager.newInstance()</span><br><span class="line">        .notify(MainActivity.FUNCTION_WITH_PARAM_AND_RESULT, <span class="string">"我是fragment传到activity的参数1"</span>, fragmentActivity,</span><br><span class="line">            fragmentResult);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//事件执行，实现于Function接口</span></span><br><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Object <span class="title">function</span><span class="params">(Object[] data)</span> </span>&#123;</span><br><span class="line">   String text = activityResult.getText().toString() + <span class="string">"\n\n\n"</span>;</span><br><span class="line"></span><br><span class="line">   activityResult.setText(text + <span class="string">"fragment调用我成功,获取到参数 :"</span> + Arrays.asList(data));</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="string">"我是activity的返回结果"</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>最终效果:</p>
+<p><img src="http://img.blog.csdn.net/20160612215028767" alt="activityfragment"></p>
+<p>示例代码：<a href="https://github.com/BoBoMEe/AndroidDev/tree/activityfragment/activityfragment" target="_blank" rel="external">ActivityFragment</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/12/androidbanner/" rel="next" title="Android无限轮播Banner的实现">
+                <i class="fa fa-chevron-left"></i> Android无限轮播Banner的实现
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/05/dagger2basic/" rel="prev" title="Android:Dagger2学习之由浅入深">
+                Android:Dagger2学习之由浅入深 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/11031953?v=3&s=460"
+               alt="bobomee" />
+          <p class="site-author-name" itemprop="name">bobomee</p>
+          <p class="site-description motion-element" itemprop="description">blog | java | Android</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BoBoMEe" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/wbwjx" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-csdn"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#handler方式"><span class="nav-number">2.</span> <span class="nav-text">handler方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播"><span class="nav-number">3.</span> <span class="nav-text">广播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EvnetBus"><span class="nav-number">4.</span> <span class="nav-text">EvnetBus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-number">5.</span> <span class="nav-text">接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新大陆"><span class="nav-number">6.</span> <span class="nav-text">新大陆</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Observable"><span class="nav-number">6.1.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observer"><span class="nav-number">6.2.</span> <span class="nav-text">Observer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObservableManager"><span class="nav-number">6.3.</span> <span class="nav-text">ObservableManager</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">7.</span> <span class="nav-text">使用</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bobomee</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'bobomee';
+      var disqus_identifier = '2016/06/05/activityfragment/';
+      var disqus_title = "使用观察者模式完美解决activity与fragment通信问题";
+      var disqus_url = 'http://bobomee.github.io/2016/06/05/activityfragment/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

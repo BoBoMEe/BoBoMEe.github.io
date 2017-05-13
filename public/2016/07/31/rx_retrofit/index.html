@@ -1,0 +1,690 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="rxjava," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="BoBoMEe" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="概述在开发中使用RxJava+Retrofit的网络框架,是时下的趋势,使用起来也非常的方便.如果能够在一定程度上进一步封装,能够大大提高我们的开发效率.接下来我们看一下比较常用的简洁处理场景.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rxjava+Retrofit结合开发的封装技巧">
+<meta property="og:url" content="http://bobomee.github.io/2016/07/31/rx_retrofit/index.html">
+<meta property="og:site_name" content="BoBoMEe">
+<meta property="og:description" content="概述在开发中使用RxJava+Retrofit的网络框架,是时下的趋势,使用起来也非常的方便.如果能够在一定程度上进一步封装,能够大大提高我们的开发效率.接下来我们看一下比较常用的简洁处理场景.">
+<meta property="og:updated_time" content="2016-08-02T02:24:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rxjava+Retrofit结合开发的封装技巧">
+<meta name="twitter:description" content="概述在开发中使用RxJava+Retrofit的网络框架,是时下的趋势,使用起来也非常的方便.如果能够在一定程度上进一步封装,能够大大提高我们的开发效率.接下来我们看一下比较常用的简洁处理场景.">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Rxjava+Retrofit结合开发的封装技巧 | BoBoMEe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0f3a06bb8dcc1e584e3c624ccf8c8e02";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BoBoMEe</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">好好学习，天天向上</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Rxjava+Retrofit结合开发的封装技巧
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-31T00:13:46+08:00" content="Jul 31 2016">
+              Jul 31 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/31/rx_retrofit/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/07/31/rx_retrofit/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在开发中使用<code>RxJava+Retrofit</code>的网络框架,是时下的趋势,使用起来也非常的方便.<br>如果能够在一定程度上进一步封装,能够大大提高我们的开发效率.接下来我们看一下比较常用的简洁处理场景.</p>
+<a id="more"></a>
+<h2 id="CreateObservable"><a href="#CreateObservable" class="headerlink" title="CreateObservable"></a>CreateObservable</h2><p>我们都知道创建一个<code>Observable</code>可以使用<code>RxJava</code>的创建操作符,比如Create,..等等,<br>在<a href="https://github.com/mgp/effective-rxjava/blob/master/items/convert-functions-to-observable.md" target="_blank" rel="external">effective-rxjava</a>中作者介绍了一种将<code>functions</code>转化为<code>observable</code>的方式,感觉非常新颖,果断使用了.</p>
+<p>通过 <code>defer</code> 和 <code>just</code> 操作符方便的将<code>Func0</code>转化为 <code>Observable</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * <span class="doctag">@return</span> an &#123;<span class="doctag">@link</span> Observable&#125; that emits invokes &#123;<span class="doctag">@code</span> function&#125; upon subscription and emits</span><br><span class="line"> *         its value</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;O&gt; <span class="function">Observable&lt;O&gt; <span class="title">makeObservable</span><span class="params">(<span class="keyword">final</span> Func0&lt;O&gt; function)</span> </span>&#123;</span><br><span class="line">    checkNotNull(function);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Observable.defer(() -&gt; Observable.just(function.call()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们都知道<code>defer</code>还有一个好处就是只有订阅时才会生效,而<code>just</code>中的参数采用了泛型化,<br>即我们可以将任意一个有返回值的方法都使用 <code>defer</code>,产生即时的数据流.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">slowBlockingMethod</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Observable&lt;Object&gt; <span class="title">newMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Observable.defer(() -&gt; Observable.just(slowBlockingMethod()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Observable&lt;Optional&lt;ContentItem&gt;&gt; fetchContentItem(</span><br><span class="line">            <span class="keyword">final</span> ContentItemIdentifier contentItemId) &#123;</span><br><span class="line">        <span class="keyword">return</span> subscribeOnScheduler(() -&gt; mContentDatabase.fetchContentItem(contentItemId));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// more delegating methods follow here ...</span></span><br><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function">Observable&lt;T&gt; <span class="title">subscribeOnScheduler</span><span class="params">(<span class="keyword">final</span> Func0&lt;T&gt; function)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> ObservableUtils.makeObservable(function)</span><br><span class="line">                .subscribeOn(mScheduler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h2><p>在<a href="http://blog.danlew.net/2015/03/02/dont-break-the-chain/" target="_blank" rel="external">Don’t break the chain: use RxJava’s compose() operator</a>中作者建议使用<code>compose</code>来避免打破<code>RxJava</code>的链式调用,<code>compose</code>中需要传入一个<code>Transformer</code>,我们先来看一下<code>Transformer</code>的源码.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">  * Transformer function used by &#123;<span class="doctag">@link</span> #compose&#125;.</span><br><span class="line">  * <span class="doctag">@warn</span> more complete description needed</span><br><span class="line">  */</span></span><br><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Transformer</span>&lt;<span class="title">T</span>, <span class="title">R</span>&gt; <span class="keyword">extends</span> <span class="title">Func1</span>&lt;<span class="title">Observable</span>&lt;<span class="title">T</span>&gt;, <span class="title">Observable</span>&lt;<span class="title">R</span>&gt;&gt; </span>&#123;</span><br><span class="line">     <span class="comment">// cover for generics insanity</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>从中我们可以看到<code>Transformer</code>是一个<code>Func1</code>,其将一种类型的<code>Observable</code>转换成另一种类型的<code>Observable</code></p>
+<h3 id="常见的Transformer用法"><a href="#常见的Transformer用法" class="headerlink" title="常见的Transformer用法"></a>常见的<code>Transformer</code>用法</h3><ul>
+<li>线程切换</li>
+</ul>
+<p>在<code>RxJava</code>中最常用的某过于 <code>线程切换</code> 了,我们定义一个线程切换的<code>RxSchedulerTransformer</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RxSchedulerTransformer</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Observable</span>.<span class="title">Transformer</span>&lt;<span class="title">T</span>, <span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> RxSchedulerTransformer&lt;Object&gt; INSTANCE = <span class="keyword">new</span> RxSchedulerTransformer&lt;&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">RxSchedulerTransformer&lt;T&gt; <span class="title">instance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (RxSchedulerTransformer&lt;T&gt;) INSTANCE;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">RxSchedulerTransformer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Observable&lt;T&gt; <span class="title">call</span><span class="params">(Observable&lt;T&gt; tObservable)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> tObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>错误处理</li>
+</ul>
+<p>一般和服务器交互取回的<code>json</code>数据结构类似下面这种,当<code>success == true</code>的时候才是正确的返回值,<br><code>success == false</code> 的时候,虽然不会走 <code>RxJava</code>的<code>OnError</code>,但是也是异常.我们希望的是 所有的 异常都在<br><code>OnError</code>中处理.<code>OnNext</code>只关心正确的返回值即可.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "success": false, // 是否成功</span><br><span class="line">    "code": "500",   // 响应码</span><br><span class="line">    "data": ""      // 内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据如上<code>json</code>,我们的<code>Transformers</code>可定义为如下格式,对结果进行一些预处理,只有正常值才返回<code>JavaBean</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RxHandleResultTransformer</span>&lt;<span class="title">T</span>&gt;</span><br><span class="line">    <span class="keyword">implements</span> <span class="title">Observable</span>.<span class="title">Transformer</span>&lt;<span class="title">Transformers</span>.<span class="title">Result</span>&lt;<span class="title">T</span>&gt;, <span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> RxHandleResultTransformer&lt;Object&gt; INSTANCE =</span><br><span class="line">      <span class="keyword">new</span> RxHandleResultTransformer&lt;&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">RxHandleResultTransformer&lt;T&gt; <span class="title">instance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (RxHandleResultTransformer&lt;T&gt;) INSTANCE;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">RxHandleResultTransformer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Observable&lt;T&gt; <span class="title">call</span><span class="params">(Observable&lt;Transformers.Result&lt;T&gt;&gt; resultObservable)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> resultObservable.flatMap(tResult -&gt; &#123;</span><br><span class="line">      <span class="keyword">if</span> (tResult.success) &#123;</span><br><span class="line">        <span class="keyword">return</span> Observable.just(tResult.data);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Observable.error(<span class="keyword">new</span> RuntimeException(tResult.code));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">final</span> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Result</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> success;</span><br><span class="line">    String code;</span><br><span class="line">    T data;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="自定义操作符"><a href="#自定义操作符" class="headerlink" title="自定义操作符"></a>自定义操作符</h2><p>和<code>compose</code>不同的是,自定义<code>Operator</code> 作用于Observable发射的单独的数据项,<code>compose</code>作用于整个流, 自定义操作符是和<code>lift</code>一起使用的,自定义操作符需要实现<code>Operator</code></p>
+<p>更多关于自定义操作符的介绍;<br><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/topics/Implementing-Your-Own-Operators.html" target="_blank" rel="external">实现自己的操作符</a><br><a href="http://mushuichuan.com/2016/02/05/rxjava-operator-10/#more" target="_blank" rel="external">RxJava操作符（十）自定义操作符</a></p>
+<h2 id="三级缓存"><a href="#三级缓存" class="headerlink" title="三级缓存"></a>三级缓存</h2><p>其实<code>Retrofit</code>是可以处理缓存的,相关介绍:<a href="http://blog.csdn.net/wbwjx/article/details/51379506" target="_blank" rel="external">Retrofit2.0使用总结及注意事项</a>,<br>这里需要注意的是<font color="red">Retrofit缓存需要使用@GET才生效</font>,而且是使用的文件存储.</p>
+<p>关于<code>RxJava</code>缓存参考:<a href="http://blog.csdn.net/lzyzsd/article/details/50120801" target="_blank" rel="external">RxJava使用场景小结</a>,用<code>RxJava</code>的方式来处理缓存问题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Observable&lt;String&gt; memory = Observable.create(<span class="keyword">new</span> Observable.OnSubscribe&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Subscriber&lt;? <span class="keyword">super</span> String&gt; subscriber)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (memoryCache != <span class="keyword">null</span>) &#123;</span><br><span class="line">            subscriber.onNext(memoryCache);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            subscriber.onCompleted();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">Observable&lt;String&gt; disk = Observable.create(<span class="keyword">new</span> Observable.OnSubscribe&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Subscriber&lt;? <span class="keyword">super</span> String&gt; subscriber)</span> </span>&#123;</span><br><span class="line">      String cachePref = rxPreferences.getString(<span class="string">"cache"</span>).get();</span><br><span class="line">      <span class="keyword">if</span> (!TextUtils.isEmpty(cachePref)) &#123;</span><br><span class="line">        subscriber.onNext(cachePref);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        subscriber.onCompleted();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).onErrorReturn(throwable-&gt;<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">Observable&lt;String&gt; network = Observable.just(<span class="string">"network"</span>).onErrorReturn(throwable -&gt; <span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//主要就是靠concat operator来实现</span></span><br><span class="line">Observable.concat(memory, disk, network)</span><br><span class="line">.first().subscriber(observer);</span><br></pre></td></tr></table></figure>
+<p>这里用到了<code>concat</code>与<code>onErrorReturn</code>两个操作符,关于<code>concat(连接操作符)</code>,<a href="http://reactivex.io/documentation/operators/concat.html" target="_blank" rel="external">官方解释</a></p>
+<p>关于<code>onErrorReturn(错误处理操作符)</code>,可以看这里:<a href="http://blog.csdn.net/wbwjx/article/details/51292219" target="_blank" rel="external">RxJava错误处理</a></p>
+<h2 id="屏幕切换"><a href="#屏幕切换" class="headerlink" title="屏幕切换"></a>屏幕切换</h2><p>存在如下两种问题:</p>
+<ol>
+<li><p>我们知道 屏幕切换等配置发生改变的时候,会导致<code>Activity</code>的重建,当我们订阅了某一个<code>Subscribtion</code>后,屏幕发生了改变,<br>及调用了<code>unsubscribe</code>方法,如何才能保证<code>Subscribtion</code>的延续呢?</p>
+</li>
+<li><p>在<code>Android</code>中<code>Context</code>是导致很多 内存泄漏的罪魁祸首.如果我们创建的<code>subscribtion</code>持有了<code>Context</code>将会变得十分的危险,<br>如果<code>Observable</code>没有准时完成,就很容易导致内存泄漏.</p>
+</li>
+</ol>
+<p>第一种问题,可以用<code>RxJava</code>的缓存机制解决,就是<code>cache</code>(或是<code>replay()</code>),</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Observable&lt;Photo&gt; request = service.getUserPhoto(id).cache();</span><br><span class="line">Subscription sub = request.subscribe(photo -&gt; handleUserPhoto(photo));</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...When the Activity is being recreated...</span></span><br><span class="line">sub.unsubscribe();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...Once the Activity is recreated...</span></span><br><span class="line">request.subscribe(photo -&gt; handleUserPhoto(photo));</span><br></pre></td></tr></table></figure>
+<p>第二个问题的解决方案就是在生命周期的某个时刻取消订阅。采用<code>CompositeSubscription</code>来管理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"> CompositeSubscription mCompositeSubscription;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSubscription</span><span class="params">(Subscription s)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.mCompositeSubscription == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.mCompositeSubscription = <span class="keyword">new</span> CompositeSubscription();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">null</span> != s)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">this</span>.mCompositeSubscription.add(s);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unsubscribe</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.mCompositeSubscription != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.mCompositeSubscription.clear();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">super</span>.onDestroy();</span><br><span class="line">   unsubscribe();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="RxAndroid-中好用的方法"><a href="#RxAndroid-中好用的方法" class="headerlink" title="RxAndroid 中好用的方法"></a>RxAndroid 中好用的方法</h2><p><code>RxAndroid</code>为我们提供了很多好用的API,如<code>HandlerThreadScheduler</code>,<code>AndroidObservable</code>,<code>ViewObservable</code><br>其中<code>HandlerThreadScheduler</code>是一个可以绑定到<code>Handler</code>上的<code>scheduler</code>,<br><code>AndroidObservable</code>可以绑定到 <code>Activity</code> 或 <code>Fragment</code>,方便生命周期的管理.同时可以方便的创建一个<code>BroadCastReceiver</code>的<code>Observable</code>,<br><code>ViewObservable</code>用于给<code>View</code>添加绑定,如 <code>ViewObservable.clicks()</code>(监听<code>View</code>的点击事件)或者 <code>ViewObservable.text()</code>(监听<code>TextView</code>的内容变化)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">AndroidObservable.bindActivity(<span class="keyword">this</span>, retrofitService.getImage(url))</span><br><span class="line">    .subscribeOn(Schedulers.io())</span><br><span class="line">    .subscribe(bitmap -&gt; myImageView.setImageBitmap(bitmap));</span><br><span class="line"></span><br><span class="line">IntentFilter filter = <span class="keyword">new</span> IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);</span><br><span class="line">AndroidObservable.fromBroadcast(context, filter)</span><br><span class="line">    .subscribe(intent -&gt; handleConnectivityChange(intent));</span><br><span class="line"></span><br><span class="line">ViewObservable.clicks(mCardNameEditText, <span class="keyword">false</span>)</span><br><span class="line">    .subscribe(view -&gt; handleClick(view));</span><br></pre></td></tr></table></figure>
+<p>参考:<a href="http://blog.csdn.net/lzyzsd/article/details/50120801" target="_blank" rel="external">RxJava使用场景小结</a><br><a href="http://imxie.cc/2016/05/24/RxJava-Retrofit-%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">RxJava + Retrofit 的实际应用场景</a><br><a href="http://blog.danlew.net/2015/03/02/dont-break-the-chain/" target="_blank" rel="external">Don’t break the chain: use RxJava’s compose() operator</a><br><a href="https://github.com/mgp/effective-rxjava/blob/master/items/convert-functions-to-observable.md" target="_blank" rel="external">effective-rxjava</a><br><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/topics/Implementing-Your-Own-Operators.html" target="_blank" rel="external">实现自己的操作符</a><br><a href="http://mushuichuan.com/2016/02/05/rxjava-operator-10/#more" target="_blank" rel="external">RxJava操作符（十）自定义操作符</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/rxjava/" rel="tag">#rxjava</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/27/drawablecompat/" rel="next" title="EditText 背景,光标着色及其原理解析">
+                <i class="fa fa-chevron-left"></i> EditText 背景,光标着色及其原理解析
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/01/rxjava-retrofit_error/" rel="prev" title="RxJava+Retrofit错误预处理">
+                RxJava+Retrofit错误预处理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/11031953?v=3&s=460"
+               alt="bobomee" />
+          <p class="site-author-name" itemprop="name">bobomee</p>
+          <p class="site-description motion-element" itemprop="description">blog | java | Android</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BoBoMEe" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/wbwjx" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-csdn"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CreateObservable"><span class="nav-number">2.</span> <span class="nav-text">CreateObservable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer"><span class="nav-number">3.</span> <span class="nav-text">Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的Transformer用法"><span class="nav-number">3.1.</span> <span class="nav-text">常见的Transformer用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义操作符"><span class="nav-number">4.</span> <span class="nav-text">自定义操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三级缓存"><span class="nav-number">5.</span> <span class="nav-text">三级缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#屏幕切换"><span class="nav-number">6.</span> <span class="nav-text">屏幕切换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RxAndroid-中好用的方法"><span class="nav-number">7.</span> <span class="nav-text">RxAndroid 中好用的方法</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bobomee</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'bobomee';
+      var disqus_identifier = '2016/07/31/rx_retrofit/';
+      var disqus_title = "Rxjava+Retrofit结合开发的封装技巧";
+      var disqus_url = 'http://bobomee.github.io/2016/07/31/rx_retrofit/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

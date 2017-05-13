@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion">
+<html class="theme-next mist use-motion">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -68,11 +68,13 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Android,Java,开发笔记" />
 
 
 
 
+
+  <link rel="alternate" href="/atom.xml" title="BoBoMEe" type="application/atom+xml" />
 
 
 
@@ -84,27 +86,27 @@
 
 
 
-<meta name="description" content="Android开发和学习笔记">
+<meta name="description" content="blog | java | Android">
 <meta property="og:type" content="website">
 <meta property="og:title" content="BoBoMEe">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://bobomee.github.io/index.html">
 <meta property="og:site_name" content="BoBoMEe">
-<meta property="og:description" content="Android开发和学习笔记">
+<meta property="og:description" content="blog | java | Android">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BoBoMEe">
-<meta name="twitter:description" content="Android开发和学习笔记">
+<meta name="twitter:description" content="blog | java | Android">
 
 
 
 <script type="text/javascript" id="hexo.configuration">
   var NexT = window.NexT || {};
   var CONFIG = {
-    scheme: 'Muse',
+    scheme: 'Mist',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: 0,
+      userId: undefined,
       author: '博主'
     }
   };
@@ -118,6 +120,16 @@
   
 
 
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0f3a06bb8dcc1e584e3c624ccf8c8e02";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -175,6 +187,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -191,6 +213,16 @@
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
           </a>
         </li>
       
@@ -233,8 +265,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/05/14/Retrofit/" itemprop="url">
-                  Retrofit2.0使用总结
+                <a class="post-title-link" href="/2016/08/01/rxjava-retrofit_error/" itemprop="url">
+                  RxJava+Retrofit错误预处理
                 </a>
               
             
@@ -247,14 +279,21 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-14T22:02:00+08:00" content="May 14 2016">
-              May 14 2016
+            <time itemprop="dateCreated" datetime="2016-08-01T11:37:49+08:00" content="Aug 1 2016">
+              Aug 1 2016
             </time>
           </span>
 
           
 
           
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/01/rxjava-retrofit_error/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/08/01/rxjava-retrofit_error/" itemprop="commentsCount"></span>
+                </a>
+              </span>
             
           
 
@@ -276,17 +315,11 @@
 
       
         
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Retrofit是由<a href="https://github.com/square">Square</a>公司出品的针对于Android和Java的类型安全的Http客户端，网络服务基于OkHttp 。</p>
-<h2 id="变化"><a href="#变化" class="headerlink" title="变化"></a>变化</h2><p>如果之前使用过Retrofit1，2.0后的API会有一些变化，<br>比如创建方式，拦截器，错误处理，转换器等，参考：<a href="http://blog.csdn.net/tiankong1206/article/details/50720758">更新到Retrofit2的一些技巧</a></p>
-<ol>
-<li>在Retrofit1中使用的是RestAdapter，而Retrofit2中使用的Retrofit实例，之前的setEndpoint变为了baseUrl。</li>
-<li>Retrofit1中使用setRequestInterceptor设置拦截器，对http请求进行相应等处理。</li>
-<li>Retrofit2通过OKHttp的拦截器拦截http请求进行监控，重写或重试等，包括日志打印等。</li>
-<li>converter，Retrofit1中的setConverter，换以addConverterFactory，用于支持Gson转换。</li>
-</ol>
-<p>更多变化参考：<a href="https://github.com/square/retrofit/blob/master/CHANGELOG.md">官方CHANGELOG.md</a></p>
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在使用 <code>RxJava+Retrofit</code> 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 <code>Subscribe</code> 代码<br>我们做了很多的尝试,比如 <code>自定义操作符</code>,<code>自定义Transformer</code>,<code>泛型处理</code>,和 自定义 <code>Subscriber</code>等</p>
+<h2 id="错误和异常举例"><a href="#错误和异常举例" class="headerlink" title="错误和异常举例"></a>错误和异常举例</h2><p>比如,在服务器返回数据中,假设服务器遵循规范,请求体 一般类似下面这种,</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"success"</span>: <span class="keyword">false</span>, <span class="comment">// 是否成功</span></span><br><span class="line">    <span class="string">"code"</span>: <span class="string">"500"</span>,   <span class="comment">// 响应码</span></span><br><span class="line">    <span class="string">"data"</span>: &#123;</span><br><span class="line">        <span class="comment">// 内容,错误的时候返回""</span></span><br><span class="line">    &#125;      </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/14/Retrofit/#more" rel="contents">
+            <a class="btn" href="/2016/08/01/rxjava-retrofit_error/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -337,7 +370,840 @@
             
               
                 
-                <a class="post-title-link" href="/2016/05/12/vp/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/31/rx_retrofit/" itemprop="url">
+                  Rxjava+Retrofit结合开发的封装技巧
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-31T00:13:46+08:00" content="Jul 31 2016">
+              Jul 31 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/31/rx_retrofit/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/07/31/rx_retrofit/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在开发中使用<code>RxJava+Retrofit</code>的网络框架,是时下的趋势,使用起来也非常的方便.<br>如果能够在一定程度上进一步封装,能够大大提高我们的开发效率.接下来我们看一下比较常用的简洁处理场景.</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/07/31/rx_retrofit/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/27/drawablecompat/" itemprop="url">
+                  EditText 背景,光标着色及其原理解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-27T11:48:32+08:00" content="Jul 27 2016">
+              Jul 27 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/27/drawablecompat/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/07/27/drawablecompat/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>看到 <a href="http://androidweekly.net/">Android Weekly</a> 最新一期有一篇文章：<a href="http://andraskindler.com/blog/2015/tinting_drawables/">Tinting drawables</a>，使用 <code>ColorFilter</code> 手动打造了一个 <code>TintBitmapDrawable</code>，之前也看到有些文章使用这种方式来实现 <code>Drawable</code> 着色或者实现类似的功能。但是，这种方案并不完善，本文将介绍一个完美的后向兼容方案。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/07/27/drawablecompat/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/26/recyclerview/" itemprop="url">
+                  Android RecyclerView 使用全解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-26T14:13:36+08:00" content="Jun 26 2016">
+              Jun 26 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/26/recyclerview/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/06/26/recyclerview/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>RecyclerView</code>出来已经很长时间了,关于其的介绍也非常的多.作为<code>ListView</code>的升级版,它更加强大和灵活.<br>可以轻松的实现各种布局和动画,见其名,知其意.<code>RecyclerView</code>用于在有限窗口中展示大量数据集合的可复用的视图.<br>这里主要梳理一下<code>Recyclerview</code>的常用方法,示例Demo:<a href="https://github.com/BoBoMEe/AndroidDev/tree/blog/blogcodes/app/src/main/java/com/bobomee/blogdemos/recycler">BoBoMEe/AndroidDev</a></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/26/recyclerview/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/25/customview/" itemprop="url">
+                  Android自定义控件细节
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-25T11:48:32+08:00" content="Jun 25 2016">
+              Jun 25 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/25/customview/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/06/25/customview/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在开发过程中,当系统提供的控件不能满足我们的需求的时候,通常都会采用自定义控件来完成,自定义控件的一般流程:</p>
+<p>attrs.xml–&gt;onMeasure()–&gt;onLayout(ViewGroup)–&gt;onDraw()–&gt;onTouchEvent()–&gt;onInterceptTouchEvent(ViewGroup);</p>
+<p>其中带有ViewGroup的是自定义ViewGroup需要用到的方法.<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/25/customview/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/23/contentprovider/" itemprop="url">
+                  android开发之contentprovider
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-23T23:45:36+08:00" content="Jun 23 2016">
+              Jun 23 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/23/contentprovider/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/06/23/contentprovider/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ContentProvider（内容提供者）是Android中的四大组件之一。主要用于程序间数据的共享(IPC的一种).<br>它提供了一套完整的机制，允许一个程序访问另一个应用程序,并且保证数据的安全性.<br>我们知道在Android中常见的数据存储方式有sharedpreferences,文件和数据库等,但是数据的访问方式会因为存储方式的不同而不同.<br>而且这些数据只能在应用内使用,而ContentProvider允许在程序间实现数据的共享,并且提供好了统一了数据的访问方式.</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/23/contentprovider/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/09/android-mvp-md/" itemprop="url">
+                  浅谈Android架构之MVP,MVVM
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-09T11:48:32+08:00" content="Jun 9 2016">
+              Jun 9 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/09/android-mvp-md/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/06/09/android-mvp-md/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>MVP(Model-View-Presenter)</code>是传统<code>MVC(Model-View-Controller)</code>在Android开发上的一种变种、进化模式。主要用来隔离UI、UI逻辑和业务逻辑、数据,创建松散耦合并可重用的对象。</p>
+<p>我们知道View层是容易变化且多种多样的,业务逻辑也是多种多样的,与传统的MVC相比,P充当了C的作用.<br>Model存储数据，View表示Model的表现，Presenter协调两者之间的通信.</p>
+<p>而后在MVP基础上也出现了一些变种,如MVVM,MVPVM等,相比较MVP而言,MVVM使数据绑定变得更加简单.MVPVM在MVVM中加入引入Presenter层</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/09/android-mvp-md/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/05/dagger2basic/" itemprop="url">
+                  Android:Dagger2学习之由浅入深
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-05T23:02:14+08:00" content="Jun 5 2016">
+              Jun 5 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/05/dagger2basic/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/06/05/dagger2basic/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Dagger2是一款使用在Java和Android上的静态的,运行时依赖注入框架.官方地址:<a href="http://google.github.io/dagger/">http://google.github.io/dagger/</a></p>
+<p>记得当初刚学习Dagger2的时候看了许多博客,但是感觉上手依然困难,所谓光学不练就是这个意思吧</p>
+<p>时至今日,用上此框架的同仁越来越多.分析文章也很多,上手相对要简单了许多.</p>
+<p>学习Dagger2最先要明白的是其各个注解的含义及工作原理,这样才可以快速的上手和使用.</p>
+<p>在这里简要记录一下在使用Dagger2过程中的感受和心得体会.</p>
+<p>本文示例代码地址:<a href="https://github.com/BoBoMEe/AndroidDev/tree/dagger2/Dagger2Sample">Dagger2Sample</a></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/05/dagger2basic/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/05/activityfragment/" itemprop="url">
+                  使用观察者模式完美解决activity与fragment通信问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-05T09:07:46+08:00" content="Jun 5 2016">
+              Jun 5 2016
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/05/activityfragment/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/06/05/activityfragment/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>通常来说，解决activity和fragment通信的问题。我们都是采用如下几种方式，<br>handler，广播，EvnetBus，接口等。那么有没有一种更好的方式来实现呢，最近项目一只在使用Rx，这里参照了一下Rx的设计来解决如上问题。先来说说常用的几种方式。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/05/activityfragment/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/12/androidbanner/" itemprop="url">
                   Android无限轮播Banner的实现
                 </a>
               
@@ -360,101 +1226,12 @@
 
           
             
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="概述"><a href="#概述" class="headerlink" title="##概述"></a>##概述</h2><p>应用首页的广告轮播<code>Banner</code>，一般都会使用<code>ViewPager</code>来实现，但是<code>ViewPager</code> 没有轮播效果。<br>现成有这么几种实现方案，<br>1.使用<code>Integer.MAX_VALUE</code> ,理论上很难达到边界。<br>2.装饰<code>adapter</code>方式<a href="https://github.com/imbryk/LoopingViewPager" target="_blank">[imbryk/LoopingViewPager@Github]</a>。<br>3.扩展<code>ViewPager</code>方式<a href="https://github.com/yanzm/LoopViewPager" target="_blank">[yanzm/LoopViewPager]</a>。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/12/vp/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/07/git_operate/" itemprop="url">
-                  git常用命令
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/12/androidbanner/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/05/12/androidbanner/" itemprop="commentsCount"></span>
                 </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-07T11:07:46+08:00" content="May 7 2016">
-              May 7 2016
-            </time>
-          </span>
-
-          
-
-          
+              </span>
             
           
 
@@ -476,202 +1253,11 @@
 
       
         
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>git 作为我们常用的版本管理工具，提供了丰富的命令操作,这里记录一下开发中我们常用的命令，以备不时之需。</p>
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><hr>
+<p>应用首页的广告轮播<code>Banner</code>，一般都会使用<code>ViewPager</code>来实现，但是<code>ViewPager</code> 没有轮播效果。<br>现成有这么几种实现方案:</p>
+<p>1.使用<code>Integer.MAX_VALUE</code> ,理论上很难达到边界。<br/><br>2.装饰<code>adapter</code>方式<a href="https://github.com/imbryk/LoopingViewPager">imbryk/LoopingViewPager@Github</a>。<br/><br>3.扩展<code>ViewPager</code>方式<a href="https://github.com/yanzm/LoopViewPager">yanzm/LoopViewPager</a>。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/07/git_operate/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/04/hexo_blog/" itemprop="url">
-                  github pages ＋ hexo ＋ next搭建个人博客
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-04T21:07:46+08:00" content="May 4 2016">
-              May 4 2016
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>github pages原本是github提供给开源项目做项目介绍的，既然是静态页面，当然拿来做blog既免费又方便了，现在流行用hexo框架 ＋ next主题，鉴于本人在搭建过程中踩过的坑，这里记录一下，希望能够方便后来人。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/04/hexo_blog/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/20/orm_sqlite/" itemprop="url">
-                  Android 之数据库的使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-20T22:02:00+08:00" content="Apr 20 2016">
-              Apr 20 2016
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>##概述</p>
-<p>在android平台上，常用的数据保存方式有Preference，文件和数据库，针对于数据库操作，<br>市面上常用的几款orm，主要有OrmLite，SugarORM，GreenDAO，Active Android，Realm</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/20/orm_sqlite/#more" rel="contents">
+            <a class="btn" href="/2016/05/12/androidbanner/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -704,6 +1290,10 @@
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -734,15 +1324,15 @@
       <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
+               src="https://avatars2.githubusercontent.com/u/11031953?v=3&s=460"
                alt="bobomee" />
           <p class="site-author-name" itemprop="name">bobomee</p>
-          <p class="site-description motion-element" itemprop="description">Android开发和学习笔记</p>
+          <p class="site-description motion-element" itemprop="description">blog | java | Android</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -752,7 +1342,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -761,8 +1351,35 @@
         </nav>
 
         
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BoBoMEe" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/wbwjx" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-csdn"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
           
         </div>
 
@@ -788,8 +1405,8 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -803,7 +1420,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Mist
   </a>
 </div>
 
@@ -882,6 +1499,25 @@
 
 
 
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'bobomee';
+      var disqus_identifier = 'index.html';
+      var disqus_title = "";
+      var disqus_url = '';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+    </script>
   
 
 

@@ -5,7 +5,7 @@
 # Site
 title: BoBoMEe #博客名
 subtitle: 好好学习，天天向上  #博客副标题
-description: Android开发和学习笔记 #网站描述, 用于爬虫抓取的关键词
+description: blog | java | Android  #网站描述, 用于爬虫抓取的关键词
 author: bobomee #作者名称
 language: zh-Hans #作者语言
 email: wbwjx115@gmail.com #作者邮箱
@@ -13,41 +13,41 @@ email: wbwjx115@gmail.com #作者邮箱
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com #用于绑定域名, 其他的不需要配置
+url: http://bobomee.github.io #用于绑定域名, 其他的不需要配置
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
 # Directory
-source_dir: source
-public_dir: public
-tag_dir: tags
-archive_dir: archives
-category_dir: categories
-code_dir: downloads/code
-i18n_dir: :lang
-skip_render:
+source_dir: source #源文件夹，这个文件夹用来存放内容。
+public_dir: public #公共文件夹，这个文件夹用于存放生成的站点文件。
+tag_dir: tags #标签文件夹
+archive_dir: archives #归档文件夹
+category_dir: categories #分类文件夹
+code_dir: downloads/code #nclude code 文件夹
+i18n_dir: :lang #国际化（i18n）文件夹
+skip_render:  #跳过指定文件的渲染，您可使用 glob 表达式来匹配路径。
 
 # Writing
-new_post_name: :title.md # File name of new posts
-default_layout: post
+new_post_name: :title.md  # 新建文章默认文件名
+default_layout: post # 默认布局
 titlecase: false # Transform title into titlecase
-external_link: true # Open external links in new tab
-filename_case: 0
-render_drafts: false
-post_asset_folder: false
-relative_link: false
-future: true
-highlight:
+external_link: true  # 在新标签中打开一个外部链接，默认为true
+filename_case: 0  #转换文件名，1代表小写；2代表大写；默认为0，意思就是创建文章的时候，是否自动帮你转换文件名，默认就行，意义不大。
+render_drafts: false #是否渲染_drafts目录下的文章，默认为false
+post_asset_folder: false  #启动 Asset 文件夹
+relative_link: false #把链接改为与根目录的相对位址，默认false
+future: true #显示未来的文章，默认false
+highlight: #代码块的设置
   enable: true
   line_number: true
   auto_detect: false
   tab_replace:
 
 # Category & Tag
-default_category: uncategorized
-category_map:
-tag_map:
+default_category: uncategorized #默认分类
+category_map: #分类别名
+tag_map: #标签别名
 
 # Archives
 #Archives 默认值为2,修改为1,Archives页面就只会列出标题,而非全文
@@ -82,9 +82,13 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
+plugins: hexo-generate-feed
 theme: next
 
-plugins: -hexo-generator-feed   #此插件用于RSS订阅, 以后有时间再介绍
+feed:
+  type: atom       #feed 类型 (atom/rss2)
+  path: atom.xml   #rss 路径
+  limit: 20        #在 rss 中最多生成的文章数(0显示所有)
 
 # Deployment 站点部署到github要配置这里
 ## Docs: https://hexo.io/docs/deployment.html
