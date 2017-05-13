@@ -5,8 +5,8 @@
 # Site
 title: BoBoMEe #博客名
 subtitle: 好好学习，天天向上  #博客副标题
-description: blog | java | Android  #网站描述, 用于爬虫抓取的关键词
-author: bobomee #作者名称
+description: Java | Android  #网站描述, 用于爬虫抓取的关键词
+author: BoBoMEe #作者名称
 language: zh-Hans #作者语言
 email: wbwjx115@gmail.com #作者邮箱
 # timezone:
@@ -45,7 +45,7 @@ highlight: #代码块的设置
   tab_replace:
 
 # Category & Tag
-default_category: uncategorized #默认分类
+default_category: #默认分类
 category_map: #分类别名
 tag_map: #标签别名
 
@@ -71,8 +71,8 @@ logger_format: dev
 ## Hexo uses Moment.js to parse and display date
 ## You can customize the date format as defined in
 ## http://momentjs.com/docs/#/displaying/format/
-date_format: MMM D YYYY
-time_format: H:mm:ss
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
 
 # Pagination 分页, 设置每页显示多少篇博文
 ## Set per_page to 0 to disable pagination
