@@ -442,7 +442,7 @@
     <link href="http://bobomee.github.io/2016/06/09/android-mvp-md/"/>
     <id>http://bobomee.github.io/2016/06/09/android-mvp-md/</id>
     <published>2016-06-09T03:48:32.000Z</published>
-    <updated>2016-07-27T13:03:08.000Z</updated>
+    <updated>2017-05-14T05:36:23.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>MVP(Model-View-Presenter)</code>是传统<code>MVC(Model-View-Controller)</code>在Android开发上的一种变种、进化模式。主要用来隔离UI、UI逻辑和业务逻辑、数据,创建松散耦合并可重用的对象。</p>
 <p>我们知道View层是容易变化且多种多样的,业务逻辑也是多种多样的,与传统的MVC相比,P充当了C的作用.<br>Model存储数据，View表示Model的表现，Presenter协调两者之间的通信.</p>
@@ -526,6 +526,8 @@
 &lt;p&gt;而后在MVP基础上也出现了一些变种,如MVVM,MVPVM等,相比较MVP而言,MVVM使数据绑定变得更加简单.MVPVM在MVVM中加入引入Presenter层&lt;/p&gt;
     
     </summary>
+    
+      <category term="Android" scheme="http://bobomee.github.io/categories/Android/"/>
     
     
       <category term="architecture" scheme="http://bobomee.github.io/tags/architecture/"/>
