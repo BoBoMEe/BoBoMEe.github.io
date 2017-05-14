@@ -1,11 +1,11 @@
 ---
 title: RxJava+Retrofit错误预处理
 date: 2016-08-01 11:37:49
-tags: rxjava
+categories: Android基础
+tags:
+   - rxjava
+   - retrofit
 ---
-
-
-<blockquote class="blockquote-center">RxJava+Retrofit错误预处理</blockquote>
 
 ## 概述
 
