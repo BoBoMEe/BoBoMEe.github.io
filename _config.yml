@@ -90,6 +90,12 @@ feed:
   path: atom.xml   #rss 路径
   limit: 20        #在 rss 中最多生成的文章数(0显示所有)
 
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
 # Deployment 站点部署到github要配置这里
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:

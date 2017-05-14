@@ -1,7 +1,8 @@
 ---
 title:  Retrofit2.0使用总结及注意事项
 date: 2016-05-12 00:13:46
-tags: android
+categories: Android基础
+tags: retrofit
 ---
 
 ## 概述

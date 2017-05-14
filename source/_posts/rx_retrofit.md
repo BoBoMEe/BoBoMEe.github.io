@@ -1,7 +1,10 @@
 ---
 title:  Rxjava+Retrofit结合开发的封装技巧
 date: 2016-07-31 00:13:46
-tags: rxjava
+categories: Android基础
+tags: 
+   - rxjava
+   - retrofit
 ---
 
 

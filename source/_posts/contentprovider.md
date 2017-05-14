@@ -1,7 +1,8 @@
 ---
 title: android开发之contentprovider
 date: 2016-06-23 23:45:36
-tags: contentprovider
+categories: Android基础
+tags: Provider
 ---
 
 ## 概述

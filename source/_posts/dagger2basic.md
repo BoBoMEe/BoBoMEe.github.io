@@ -1,6 +1,7 @@
 ---
 title: Android:Dagger2学习之由浅入深
 date: 2016-06-05 23:02:14
+categories: Android基础
 tags: dagger2
 ---
 

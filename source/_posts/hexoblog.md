@@ -1,6 +1,7 @@
 ---
 title: github pages ＋ hexo ＋ next搭建个人博客
 date: 2016-05-04 21:07:46
+categories: 开发工具
 tags: hexo
 ---
 

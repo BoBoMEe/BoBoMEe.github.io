@@ -5,11 +5,14 @@
   
 
 
-<html class="theme-next pisces use-motion">
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
 
 
 
@@ -27,9 +30,12 @@
 
 
 
+
+
+
   
   
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -63,12 +69,12 @@
 
 
 
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="android," />
+  <meta name="keywords" content="retrofit," />
 
 
 
@@ -79,7 +85,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
 
 
 
@@ -98,7 +104,7 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
 Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http客户端，
 如果看源码会发现其实质上就是对okHttp的封装，使用面向接口的方式进行网络请求，利用动态生成的代理类封装了网络接口请求的底层,
 其将请求返回j">
-<meta property="og:updated_time" content="2016-06-12T05:29:50.000Z">
+<meta property="og:updated_time" content="2017-05-14T11:11:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Retrofit2.0使用总结及注意事项">
 <meta name="twitter:description" content="概述随着Google对HttpClient 摒弃,和Volley的逐渐没落,OkHttp开始异军突起,而Retrofit则对okHttp进行了强制依赖。
@@ -108,21 +114,37 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
 
 
 
-<script type="text/javascript" id="hexo.configuration">
+<script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
+    root: '/',
     scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post"},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: undefined,
+      userId: '0',
       author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     }
   };
 </script>
 
-  <title> Retrofit2.0使用总结及注意事项 | BoBoMEe </title>
+
+
+  <link rel="canonical" href="http://bobomee.github.io/2016/05/12/retrofit/"/>
+
+
+
+
+
+  <title>Retrofit2.0使用总结及注意事项 | BoBoMEe</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -131,15 +153,10 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
 
 
 
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?0f3a06bb8dcc1e584e3c624ccf8c8e02";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
+
+
+
+
 
 
 
@@ -153,29 +170,33 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
 
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">BoBoMEe</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BoBoMEe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">好好学习，天天向上</h1>
+      
   </div>
-  <p class="site-subtitle">好好学习，天天向上</p>
-</div>
 
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 <nav class="site-nav">
@@ -191,16 +212,6 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
           </a>
         </li>
       
@@ -242,6 +253,8 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
   
 </nav>
 
+
+
  </div>
     </header>
 
@@ -255,72 +268,113 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
     
 
   
-  
 
   
   
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://bobomee.github.io/2016/05/12/retrofit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BoBoMEe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/11031953?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BoBoMEe">
+    </span>
 
     
       <header class="post-header">
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Retrofit2.0使用总结及注意事项
-              
-            
-          </h1>
+          <h2 class="post-title" itemprop="name headline">Retrofit2.0使用总结及注意事项</h2>
         
 
         <div class="post-meta">
           <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-12T00:13:46+08:00" content="2016-05-12">
-              2016-05-12
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-12T00:13:46+08:00">
+                2016-05-12
+              </time>
+            
+
+            
+
+            
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android基础/" itemprop="url" rel="index">
+                    <span itemprop="name">Android基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
             
               <span class="post-comments-count">
-                &nbsp; | &nbsp;
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
                 <a href="/2016/05/12/retrofit/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/05/12/retrofit/" itemprop="commentsCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/05/12/retrofit/" itemprop="commentCount"></span>
                 </a>
               </span>
             
           
 
           
-
-          
           
              <span id="/2016/05/12/retrofit/" class="leancloud_visitors" data-flag-title="Retrofit2.0使用总结及注意事项">
-               &nbsp; | &nbsp;
+               <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
                </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
+
+          
+
+          
+
         </div>
       </header>
     
-
 
     <div class="post-body" itemprop="articleBody">
 
@@ -457,6 +511,14 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
     <div>
       
         
+
+      
+    </div>
+
+    <div>
+      
+        
+
       
     </div>
 
@@ -471,9 +533,13 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
       
         <div class="post-tags">
           
-            <a href="/tags/android/" rel="tag">#android</a>
+            <a href="/tags/retrofit/" rel="tag"># retrofit</a>
           
         </div>
+      
+
+      
+        
       
 
       
@@ -485,6 +551,8 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
               </a>
             
           </div>
+
+          <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
@@ -519,7 +587,7 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
       <div id="disqus_thread">
         <noscript>
           Please enable JavaScript to view the
-          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
         </noscript>
       </div>
     
@@ -554,28 +622,44 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
         </ul>
       
 
-      <section class="site-overview sidebar-panel ">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars2.githubusercontent.com/u/11031953?v=3&s=460"
                alt="BoBoMEe" />
           <p class="site-author-name" itemprop="name">BoBoMEe</p>
-          <p class="site-description motion-element" itemprop="description">Java | Android</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
         </div>
         <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">15</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
 
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
           
 
           
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
             <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">10</span>
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -607,7 +691,7 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
               <span class="links-of-author-item">
                 <a href="http://blog.csdn.net/wbwjx" target="_blank" title="CSDN">
                   
-                    <i class="fa fa-fw fa-csdn"></i>
+                    <i class="fa fa-fw fa-archive"></i>
                   
                   CSDN
                 </a>
@@ -622,19 +706,29 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
         
         
 
+        
+
+
       </section>
 
       
+      <!--noindex-->
         <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
+
             
               
             
+
             
               <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REST"><span class="nav-number">2.</span> <span class="nav-text">REST</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-0与1-9使用比较"><span class="nav-number">3.</span> <span class="nav-text">2.0与1.9使用比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-9使用配置："><span class="nav-number">4.</span> <span class="nav-text">1.9使用配置：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-0使用配置"><span class="nav-number">5.</span> <span class="nav-text">2.0使用配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-0使用介绍"><span class="nav-number">6.</span> <span class="nav-text">2.0使用介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法："><span class="nav-number">6.1.</span> <span class="nav-text">基本用法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#retrofit注解："><span class="nav-number">6.2.</span> <span class="nav-text">retrofit注解：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义Converter"><span class="nav-number">7.</span> <span class="nav-text">自定义Converter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义Interceptor"><span class="nav-number">8.</span> <span class="nav-text">自定义Interceptor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存策略"><span class="nav-number">9.</span> <span class="nav-text">缓存策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置目录"><span class="nav-number">9.1.</span> <span class="nav-text">配置目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存第一种类型"><span class="nav-number">9.2.</span> <span class="nav-text">缓存第一种类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存第二种类型"><span class="nav-number">9.3.</span> <span class="nav-text">缓存第二种类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存第三种类型"><span class="nav-number">9.4.</span> <span class="nav-text">缓存第三种类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误处理"><span class="nav-number">10.</span> <span class="nav-text">错误处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络状态监听"><span class="nav-number">11.</span> <span class="nav-text">网络状态监听</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit封装"><span class="nav-number">12.</span> <span class="nav-text">Retrofit封装</span></a></li></ol></div>
             
+
           </div>
         </section>
+      <!--/noindex-->
+      
+
       
 
     </div>
@@ -657,8 +751,9 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
   <span class="author" itemprop="copyrightHolder">BoBoMEe</span>
 </div>
 
+
 <div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
@@ -668,15 +763,20 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
   </a>
 </div>
 
+
         
 
         
       </div>
     </footer>
 
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
   </div>
 
   
@@ -699,90 +799,120 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
 
 
 
-  
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
 
 
 
-  
-  
 
 
-  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
-
-
-
-  
-
-
-
-  
-
-    <script type="text/javascript">
-      var disqus_shortname = 'bobomee';
-      var disqus_identifier = '2016/05/12/retrofit/';
-      var disqus_title = "Retrofit2.0使用总结及注意事项";
-      var disqus_url = 'http://bobomee.github.io/2016/05/12/retrofit/';
-
-      function run_disqus_script(disqus_script){
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      }
-
-      run_disqus_script('count.js');
-      
-        run_disqus_script('embed.js');
-      
-    </script>
-  
 
 
 
 
   
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://BoBoMEe.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://bobomee.github.io/2016/05/12/retrofit/';
+          this.page.identifier = '2016/05/12/retrofit/';
+          this.page.title = 'Retrofit2.0使用总结及注意事项';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://BoBoMEe.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
 
   
 
@@ -816,6 +946,14 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
             var element = document.getElementById(url);
 
             $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
           }
         })
         .fail(function (object, error) {
@@ -884,6 +1022,34 @@ Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http
   </script>
 
 
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
 
   
 

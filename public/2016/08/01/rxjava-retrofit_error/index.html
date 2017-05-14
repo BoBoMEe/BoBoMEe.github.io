@@ -5,11 +5,14 @@
   
 
 
-<html class="theme-next pisces use-motion">
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
 
 
 
@@ -27,9 +30,12 @@
 
 
 
+
+
+
   
   
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -63,9 +69,9 @@
 
 
 
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="rxjava," />
@@ -79,47 +85,69 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
 
 
 
 
 
 
-<meta name="description" content="概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
+<meta name="description" content="RxJava+Retrofit错误预处理
+
+概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
 错误和异常举例比如,在服务器返回数据中,假设服务器遵循规范,请求体 一般类似下面这种,
-1234567&amp;#123;    &quot;success&quot;: false, /">
+1234567&amp;#123;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RxJava+Retrofit错误预处理">
 <meta property="og:url" content="http://bobomee.github.io/2016/08/01/rxjava-retrofit_error/index.html">
 <meta property="og:site_name" content="BoBoMEe">
-<meta property="og:description" content="概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
+<meta property="og:description" content="RxJava+Retrofit错误预处理
+
+概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
 错误和异常举例比如,在服务器返回数据中,假设服务器遵循规范,请求体 一般类似下面这种,
-1234567&amp;#123;    &quot;success&quot;: false, /">
-<meta property="og:updated_time" content="2016-07-31T16:51:24.000Z">
+1234567&amp;#123;">
+<meta property="og:updated_time" content="2017-05-14T02:58:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxJava+Retrofit错误预处理">
-<meta name="twitter:description" content="概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
+<meta name="twitter:description" content="RxJava+Retrofit错误预处理
+
+概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
 错误和异常举例比如,在服务器返回数据中,假设服务器遵循规范,请求体 一般类似下面这种,
-1234567&amp;#123;    &quot;success&quot;: false, /">
+1234567&amp;#123;">
 
 
 
-<script type="text/javascript" id="hexo.configuration">
+<script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
+    root: '/',
     scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post"},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: undefined,
+      userId: '0',
       author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     }
   };
 </script>
 
-  <title> RxJava+Retrofit错误预处理 | BoBoMEe </title>
+
+
+  <link rel="canonical" href="http://bobomee.github.io/2016/08/01/rxjava-retrofit_error/"/>
+
+
+
+
+
+  <title>RxJava+Retrofit错误预处理 | BoBoMEe</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -128,15 +156,10 @@
 
 
 
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?0f3a06bb8dcc1e584e3c624ccf8c8e02";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
+
+
+
+
 
 
 
@@ -150,29 +173,33 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
 
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">BoBoMEe</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BoBoMEe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">好好学习，天天向上</h1>
+      
   </div>
-  <p class="site-subtitle">好好学习，天天向上</p>
-</div>
 
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 <nav class="site-nav">
@@ -188,16 +215,6 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
           </a>
         </li>
       
@@ -239,6 +256,8 @@
   
 </nav>
 
+
+
  </div>
     </header>
 
@@ -252,38 +271,49 @@
     
 
   
-  
 
   
   
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://bobomee.github.io/2016/08/01/rxjava-retrofit_error/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BoBoMEe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/11031953?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BoBoMEe">
+    </span>
 
     
       <header class="post-header">
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                RxJava+Retrofit错误预处理
-              
-            
-          </h1>
+          <h2 class="post-title" itemprop="name headline">RxJava+Retrofit错误预处理</h2>
         
 
         <div class="post-meta">
           <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-01T11:37:49+08:00" content="2016-08-01">
-              2016-08-01
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-01T11:37:49+08:00">
+                2016-08-01
+              </time>
+            
+
+            
+
+            
           </span>
 
           
@@ -291,33 +321,41 @@
           
             
               <span class="post-comments-count">
-                &nbsp; | &nbsp;
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
                 <a href="/2016/08/01/rxjava-retrofit_error/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/08/01/rxjava-retrofit_error/" itemprop="commentsCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/08/01/rxjava-retrofit_error/" itemprop="commentCount"></span>
                 </a>
               </span>
             
           
 
           
-
-          
           
              <span id="/2016/08/01/rxjava-retrofit_error/" class="leancloud_visitors" data-flag-title="RxJava+Retrofit错误预处理">
-               &nbsp; | &nbsp;
+               <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
                </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
+
+          
+
+          
+
         </div>
       </header>
     
-
 
     <div class="post-body" itemprop="articleBody">
 
@@ -325,7 +363,9 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在使用 <code>RxJava+Retrofit</code> 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 <code>Subscribe</code> 代码<br>我们做了很多的尝试,比如 <code>自定义操作符</code>,<code>自定义Transformer</code>,<code>泛型处理</code>,和 自定义 <code>Subscriber</code>等</p>
+        <blockquote class="blockquote-center">RxJava+Retrofit错误预处理</blockquote>
+
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在使用 <code>RxJava+Retrofit</code> 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 <code>Subscribe</code> 代码<br>我们做了很多的尝试,比如 <code>自定义操作符</code>,<code>自定义Transformer</code>,<code>泛型处理</code>,和 自定义 <code>Subscriber</code>等</p>
 <h2 id="错误和异常举例"><a href="#错误和异常举例" class="headerlink" title="错误和异常举例"></a>错误和异常举例</h2><p>比如,在服务器返回数据中,假设服务器遵循规范,请求体 一般类似下面这种,</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"success"</span>: <span class="keyword">false</span>, <span class="comment">// 是否成功</span></span><br><span class="line">    <span class="string">"code"</span>: <span class="string">"500"</span>,   <span class="comment">// 响应码</span></span><br><span class="line">    <span class="string">"data"</span>: &#123;</span><br><span class="line">        <span class="comment">// 内容,错误的时候返回""</span></span><br><span class="line">    &#125;      </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
@@ -360,6 +400,14 @@
     <div>
       
         
+
+      
+    </div>
+
+    <div>
+      
+        
+
       
     </div>
 
@@ -374,9 +422,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/rxjava/" rel="tag">#rxjava</a>
+            <a href="/tags/rxjava/" rel="tag"># rxjava</a>
           
         </div>
+      
+
+      
+        
       
 
       
@@ -388,6 +440,8 @@
               </a>
             
           </div>
+
+          <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
@@ -418,7 +472,7 @@
       <div id="disqus_thread">
         <noscript>
           Please enable JavaScript to view the
-          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
         </noscript>
       </div>
     
@@ -453,28 +507,44 @@
         </ul>
       
 
-      <section class="site-overview sidebar-panel ">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars2.githubusercontent.com/u/11031953?v=3&s=460"
                alt="BoBoMEe" />
           <p class="site-author-name" itemprop="name">BoBoMEe</p>
-          <p class="site-description motion-element" itemprop="description">Java | Android</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
         </div>
         <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">15</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
 
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
           
 
           
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
             <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">10</span>
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -506,7 +576,7 @@
               <span class="links-of-author-item">
                 <a href="http://blog.csdn.net/wbwjx" target="_blank" title="CSDN">
                   
-                    <i class="fa fa-fw fa-csdn"></i>
+                    <i class="fa fa-fw fa-archive"></i>
                   
                   CSDN
                 </a>
@@ -521,19 +591,29 @@
         
         
 
+        
+
+
       </section>
 
       
+      <!--noindex-->
         <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
+
             
               
             
+
             
               <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误和异常举例"><span class="nav-number">2.</span> <span class="nav-text">错误和异常举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误处理"><span class="nav-number">3.</span> <span class="nav-text">错误处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer-和-Func-处理的区别"><span class="nav-number">4.</span> <span class="nav-text">Transformer 和 Func 处理的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不规范数据的处理"><span class="nav-number">5.</span> <span class="nav-text">不规范数据的处理</span></a></li></ol></div>
             
+
           </div>
         </section>
+      <!--/noindex-->
+      
+
       
 
     </div>
@@ -556,8 +636,9 @@
   <span class="author" itemprop="copyrightHolder">BoBoMEe</span>
 </div>
 
+
 <div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
 
 <div class="theme-info">
@@ -567,15 +648,20 @@
   </a>
 </div>
 
+
         
 
         
       </div>
     </footer>
 
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
   </div>
 
   
@@ -598,90 +684,120 @@
 
 
 
-  
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
 
 
 
-  
-  
 
 
-  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
-
-
-
-  
-
-
-
-  
-
-    <script type="text/javascript">
-      var disqus_shortname = 'bobomee';
-      var disqus_identifier = '2016/08/01/rxjava-retrofit_error/';
-      var disqus_title = "RxJava+Retrofit错误预处理";
-      var disqus_url = 'http://bobomee.github.io/2016/08/01/rxjava-retrofit_error/';
-
-      function run_disqus_script(disqus_script){
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      }
-
-      run_disqus_script('count.js');
-      
-        run_disqus_script('embed.js');
-      
-    </script>
-  
 
 
 
 
   
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://BoBoMEe.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://bobomee.github.io/2016/08/01/rxjava-retrofit_error/';
+          this.page.identifier = '2016/08/01/rxjava-retrofit_error/';
+          this.page.title = 'RxJava+Retrofit错误预处理';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://BoBoMEe.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
 
   
 
@@ -715,6 +831,14 @@
             var element = document.getElementById(url);
 
             $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
           }
         })
         .fail(function (object, error) {
@@ -783,6 +907,34 @@
   </script>
 
 
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
 
   
 

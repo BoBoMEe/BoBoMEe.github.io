@@ -1,6 +1,7 @@
 ---
 title: 快速开发之Android Orm总结
 date: 2016-04-20 22:02:00
+categories: Android基础
 tags: orm
 ---
 

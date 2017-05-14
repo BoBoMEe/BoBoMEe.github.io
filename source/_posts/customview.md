@@ -1,7 +1,8 @@
 ---
 title: Android自定义控件细节
 date: 2016-06-25 11:48:32
-tags: android
+categories: 自定义控件
+tags: 自定义属性
 ---
 
 ## 概述

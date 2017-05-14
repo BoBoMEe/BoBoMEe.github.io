@@ -1,7 +1,10 @@
 ---
 title: 使用观察者模式完美解决activity与fragment通信问题
 date: 2016-06-05 09:07:46
-tags: android
+categories: Android基础
+tags:
+   - activity
+   - fragment
 ---
 
 

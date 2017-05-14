@@ -5,6 +5,8 @@ tags: rxjava
 ---
 
 
+<blockquote class="blockquote-center">RxJava+Retrofit错误预处理</blockquote>
+
 ## 概述
 
 在使用 `RxJava+Retrofit` 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 `Subscribe` 代码

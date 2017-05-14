@@ -1,7 +1,8 @@
 ---
 title: 浅谈Android架构之MVP,MVVM
 date: 2016-06-09 11:48:32
-tags: architecture
+categories: 架构设计
+tags: mvp
 ---
 
 

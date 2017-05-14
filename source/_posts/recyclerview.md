@@ -1,6 +1,7 @@
 ---
 title: Android RecyclerView 使用全解析
 date: 2016-06-26 14:13:36
+categories: Android基础
 tags: recyclerview
 ---
 

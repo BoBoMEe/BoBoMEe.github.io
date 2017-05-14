@@ -1,7 +1,8 @@
 ---
 title: EditText 背景,光标着色及其原理解析
 date: 2016-07-27 11:48:32
-tags: android
+categories: Android基础
+tags: EditText
 ---
 
 ## 概述

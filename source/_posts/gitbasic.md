@@ -1,6 +1,7 @@
 ---
 title: git常用命令
 date: 2016-05-07 11:07:46
+categories: 开发工具
 tags: git
 ---
 

@@ -1,7 +1,10 @@
 ---
 title: Java依赖注入（控制反转）
 date: 2015-12-30 21:53:46
-tags: java
+categories: Java基础
+tags:
+   - IOC
+   - DI
 ---
 
 ## 概述

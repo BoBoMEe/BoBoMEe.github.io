@@ -1,7 +1,8 @@
 ---
 title: Android无限轮播Banner的实现
 date: 2016-05-12 20:02:00
-tags: android
+categories: 自定义控件
+tags: banner
 ---
 
 
