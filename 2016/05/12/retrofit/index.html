@@ -1,0 +1,1396 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="BoBoMEe" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="概述随着Google对HttpClient 摒弃,和Volley的逐渐没落,OkHttp开始异军突起,而Retrofit则对okHttp进行了强制依赖。
+Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http客户端，
+如果看源码会发现其实质上就是对okHttp的封装，使用面向接口的方式进行网络请求，利用动态生成的代理类封装了网络接口请求的底层,
+其将请求返回j">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Retrofit2.0使用总结及注意事项">
+<meta property="og:url" content="http://bobomee.github.io/2016/05/12/retrofit/index.html">
+<meta property="og:site_name" content="BoBoMEe">
+<meta property="og:description" content="概述随着Google对HttpClient 摒弃,和Volley的逐渐没落,OkHttp开始异军突起,而Retrofit则对okHttp进行了强制依赖。
+Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http客户端，
+如果看源码会发现其实质上就是对okHttp的封装，使用面向接口的方式进行网络请求，利用动态生成的代理类封装了网络接口请求的底层,
+其将请求返回j">
+<meta property="og:updated_time" content="2016-06-12T05:29:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Retrofit2.0使用总结及注意事项">
+<meta name="twitter:description" content="概述随着Google对HttpClient 摒弃,和Volley的逐渐没落,OkHttp开始异军突起,而Retrofit则对okHttp进行了强制依赖。
+Retrofit是由Square公司出品的针对于Android和Java的类型安全的Http客户端，
+如果看源码会发现其实质上就是对okHttp的封装，使用面向接口的方式进行网络请求，利用动态生成的代理类封装了网络接口请求的底层,
+其将请求返回j">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bobomee.github.io/2016/05/12/retrofit/"/>
+
+
+
+
+
+  <title>Retrofit2.0使用总结及注意事项 | BoBoMEe</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BoBoMEe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">好好学习，天天向上</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://bobomee.github.io/2016/05/12/retrofit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BoBoMEe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/11031953?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BoBoMEe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Retrofit2.0使用总结及注意事项</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-12T00:13:46+08:00">
+                2016-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/05/12/retrofit/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/05/12/retrofit/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2016/05/12/retrofit/" class="leancloud_visitors" data-flag-title="Retrofit2.0使用总结及注意事项">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>随着Google对HttpClient 摒弃,和Volley的逐渐没落,OkHttp开始异军突起,而Retrofit则对okHttp进行了强制依赖。</p>
+<p>Retrofit是由<a href="https://github.com/square" target="_blank" rel="external">Square</a>公司出品的针对于Android和Java的类型安全的Http客户端，</p>
+<p>如果看源码会发现其实质上就是对okHttp的封装，使用面向接口的方式进行网络请求，利用动态生成的代理类封装了网络接口请求的底层,</p>
+<p>其将请求返回javaBean，对网络认证 REST API进行了很好对支持此，使用Retrofit将会极大的提高我们应用的网络体验。</p>
+<a id="more"></a>
+<h2 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h2><p>既然是RESTful架构,那么我们就来看一下什么是REST吧。<br>REST(REpresentational State Transfer)是一组架构约束条件和原则。<br>RESTful架构都满足以下规则：<br>（1）每一个URI代表一种资源；<br>（2）客户端和服务器之间，传递这种资源的某种表现层；<br>（3）客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</p>
+<p>更多关于REST的介绍：<a href="https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/08.3.md" target="_blank" rel="external">什么是REST - GitHub</a>讲解的非常详细</p>
+<h2 id="2-0与1-9使用比较"><a href="#2-0与1-9使用比较" class="headerlink" title="2.0与1.9使用比较"></a>2.0与1.9使用比较</h2><p>如果之前使用过Retrofit1，会发现2.0后的API会有一些变化，<br>比如创建方式，拦截器，错误处理，转换器等，如下我们列举以下他们使用起来具体的区别有哪些。</p>
+<p>(1)  在Retrofit1中使用的是RestAdapter，而Retrofit2中使用的Retrofit实例，之前的setEndpoint变为了baseUrl。<br>(2)  Retrofit1中使用setRequestInterceptor设置拦截器，对http请求进行相应等处理。<br>(3)  Retrofit2通过OKHttp的拦截器拦截http请求进行监控，重写或重试等，包括日志打印等。<br>(4)  converter，Retrofit1中的setConverter，换以addConverterFactory，用于支持Gson转换。</p>
+<p>Retrofit1体验不好的地方:</p>
+<p>(1)  Retrofit1不能同时操作response返回数据<code>(比如说返回的 Header 部分或者 URL)</code>和序列化后的数据<code>(JAVABEAN)</code>，<br>(2)  Retrofit1中同步和异步执行同一个方法需要分别定义接口。<br>(3)  Retrofit1对正在进行的网络任务无法取消。</p>
+<p>参考：<a href="https://github.com/square/retrofit/blob/master/CHANGELOG.md" target="_blank" rel="external">官方CHANGELOG.md</a><br><a href="http://blog.csdn.net/tiankong1206/article/details/50720758" target="_blank" rel="external">更新到Retrofit2的一些技巧</a></p>
+<h2 id="1-9使用配置："><a href="#1-9使用配置：" class="headerlink" title="1.9使用配置："></a>1.9使用配置：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//gson converter</span></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">static</span> Gson gson = <span class="keyword">new</span> GsonBuilder()</span><br><span class="line">    .setDateFormat(<span class="string">"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"</span>)</span><br><span class="line">    .serializeNulls()</span><br><span class="line">    .create();</span><br><span class="line"></span><br><span class="line"><span class="comment">// client</span></span><br><span class="line">OkHttpClient client = <span class="keyword">new</span> OkHttpClient();</span><br><span class="line">client.setReadTimeout(<span class="number">12</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">RestAdapter.Builder builder = <span class="keyword">new</span> RestAdapter.Builder();</span><br><span class="line">builder.setClient(<span class="keyword">new</span> OkClient(client))</span><br><span class="line">       <span class="comment">//日志打印</span></span><br><span class="line">       .setLogLevel(RestAdapter.LogLevel.FULL)</span><br><span class="line">       <span class="comment">//baseUrl</span></span><br><span class="line">       .setEndpoint(<span class="string">"https://api.github.com"</span>)</span><br><span class="line">       <span class="comment">//转换器</span></span><br><span class="line">       .setConverter(<span class="keyword">new</span> GsonConverter(gson))</span><br><span class="line">       <span class="comment">//错误处理</span></span><br><span class="line">       .setErrorHandler(<span class="keyword">new</span> ErrorHandler() &#123;</span><br><span class="line">                   <span class="meta">@Override</span></span><br><span class="line">                   <span class="function"><span class="keyword">public</span> Throwable <span class="title">handleError</span><span class="params">(RetrofitError cause)</span> </span>&#123;</span><br><span class="line">                       <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;)</span><br><span class="line">       <span class="comment">//拦截器</span></span><br><span class="line">       .setRequestInterceptor(authorizationInterceptor)</span><br><span class="line">RestAdapter restAdapter = builder.build();</span><br><span class="line">apiService = restAdapter.create(ApiService.class);</span><br></pre></td></tr></table></figure>
+<h2 id="2-0使用配置"><a href="#2-0使用配置" class="headerlink" title="2.0使用配置"></a>2.0使用配置</h2><p>引入依赖</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">compile <span class="string">'com.squareup.retrofit2:retrofit:2.0.2'</span></span><br><span class="line">compile <span class="string">'com.squareup.retrofit2:converter-gson:2.0.2'</span></span><br><span class="line">compile <span class="string">'com.squareup.retrofit2:adapter-rxjava:2.0.2'</span></span><br><span class="line"></span><br><span class="line">compile <span class="string">'com.squareup.okhttp3:logging-interceptor:3.2.0'</span></span><br></pre></td></tr></table></figure>
+<p>OkHttp配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HttpLoggingInterceptor interceptor = <span class="keyword">new</span> HttpLoggingInterceptor();</span><br><span class="line">     interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);</span><br><span class="line">     client = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">             .addInterceptor(interceptor)</span><br><span class="line">             .retryOnConnectionFailure(<span class="keyword">true</span>)</span><br><span class="line">             .connectTimeout(<span class="number">15</span>, TimeUnit.SECONDS)</span><br><span class="line">             .addNetworkInterceptor(authorizationInterceptor)</span><br><span class="line">             .build();</span><br></pre></td></tr></table></figure>
+<p>其中 level 为 BASIC / HEADERS / BODY，BODY等同于1.9中的FULL<br>retryOnConnectionFailure:错误重联<br>addInterceptor:设置应用拦截器，可用于设置公共参数，头信息，日志拦截等<br>addNetworkInterceptor：网络拦截器，可以用于重试或重写，对应与1.9中的setRequestInterceptor。<br>参考：<a href="https://github.com/square/okhttp/wiki/Interceptors" target="_blank" rel="external">Interceptors</a><br>中文翻译：<a href="http://www.jianshu.com/p/2710ed1e6b48" target="_blank" rel="external">Okhttp-wiki 之 Interceptors 拦截器</a></p>
+<p>Retrofit配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">.baseUrl(BASE_URL)</span><br><span class="line">.client(client)</span><br><span class="line">.addCallAdapterFactory(RxJavaCallAdapterFactory.create())</span><br><span class="line">.addConverterFactory(GsonConverterFactory.create(gson))</span><br><span class="line">.build();</span><br><span class="line">apiService = retrofit.create(ApiService.class);</span><br></pre></td></tr></table></figure>
+<p>其中baseUrl相当于1.9中的setEndPoint,<br>addCallAdapterFactory提供RxJava支持，如果没有提供响应的支持(RxJava,Call),则会跑出异常。<br>addConverterFactory提供Gson支持，可以添加多种序列化Factory，但是GsonConverterFactory必须放在最后,否则会抛出异常。<br>参考：<a href="https://realm.io/cn/news/droidcon-jake-wharton-simple-http-retrofit-2/" target="_blank" rel="external">用 Retrofit 2 简化 HTTP 请求</a></p>
+<h2 id="2-0使用介绍"><a href="#2-0使用介绍" class="headerlink" title="2.0使用介绍"></a>2.0使用介绍</h2><p><font color="#DC143C" size="5">注意：</font>retrofit2.0后：BaseUrl要以/结尾；@GET 等请求不要以/开头；@Url: 可以定义完整url，不要以 / 开头。<br>关于URL拼接注意事项：<a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0915/3460.html" target="_blank" rel="external">Retrofit 2.0：有史以来最大的改进</a></p>
+<h3 id="基本用法："><a href="#基本用法：" class="headerlink" title="基本用法："></a>基本用法：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定以接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GitHubService</span> </span>&#123;</span><br><span class="line">  <span class="meta">@GET</span>(<span class="string">"users/&#123;user&#125;/repos"</span>)</span><br><span class="line">  Call&lt;List&lt;Repo&gt;&gt; listRepos(<span class="meta">@Path</span>(<span class="string">"user"</span>) String user);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取实例</span></span><br><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">	<span class="comment">//设置OKHttpClient,如果不设置会提供一个默认的</span></span><br><span class="line">	.client(<span class="keyword">new</span> OkHttpClient())</span><br><span class="line">	<span class="comment">//设置baseUrl</span></span><br><span class="line">    .baseUrl(<span class="string">"https://api.github.com/"</span>)</span><br><span class="line">    <span class="comment">//添加Gson转换器</span></span><br><span class="line">    .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line">GitHubService service = retrofit.create(GitHubService.class);</span><br><span class="line"></span><br><span class="line"><span class="comment">//同步请求</span></span><br><span class="line"><span class="comment">//https://api.github.com/users/octocat/repos</span></span><br><span class="line">Call&lt;List&lt;Repo&gt;&gt; call = service.listRepos(<span class="string">"octocat"</span>);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">     Response&lt;List&lt;Repo&gt;&gt; repos  = call.execute();</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">     e.printStackTrace();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//call只能调用一次。否则会抛 IllegalStateException</span></span><br><span class="line">Call&lt;List&lt;Repo&gt;&gt; clone = call.clone();</span><br><span class="line"></span><br><span class="line"><span class="comment">//异步请求</span></span><br><span class="line">clone.enqueue(<span class="keyword">new</span> Callback&lt;List&lt;Repo&gt;&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;List&lt;Repo&gt;&gt; call, Response&lt;List&lt;Repo&gt;&gt; response)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// Get result bean from response.body()</span></span><br><span class="line">            List&lt;Repo&gt; repos = response.body();</span><br><span class="line">            <span class="comment">// Get header item from response</span></span><br><span class="line">            String links = response.headers().get(<span class="string">"Link"</span>);</span><br><span class="line">            <span class="comment">/**</span><br><span class="line">			  * 不同于retrofit1 可以同时操作序列化数据javabean和header</span><br><span class="line">			  */</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call&lt;List&lt;Repo&gt;&gt; call, Throwable t)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 取消</span></span><br><span class="line">call.cancel();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//rxjava support</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GitHubService</span> </span>&#123;</span><br><span class="line">  <span class="meta">@GET</span>(<span class="string">"users/&#123;user&#125;/repos"</span>)</span><br><span class="line">  Observable&lt;List&lt;Repo&gt;&gt; listRepos(<span class="meta">@Path</span>(<span class="string">"user"</span>) String user);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取实例</span></span><br><span class="line"><span class="comment">// Http request</span></span><br><span class="line">Observable&lt;List&lt;Repo&gt;&gt; call = service.listRepos(<span class="string">"octocat"</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="retrofit注解："><a href="#retrofit注解：" class="headerlink" title="retrofit注解："></a>retrofit注解：</h3><p>方法注解，包含@GET、@POST、@PUT、@DELETE、@PATH、@HEAD、@OPTIONS、@HTTP。<br>标记注解，包含@FormUrlEncoded、@Multipart、@Streaming。<br>参数注解，包含@Query,@QueryMap、@Body、@Field，@FieldMap、@Part，@PartMap。</p>
+<p>其他注解，@Path、@Header,@Headers、@Url</p>
+<p><font color="#DC143C" size="5">几个特殊的注解</font><br>@HTTP：可以替代其他方法的任意一种</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">  * method 表示请的方法，不区分大小写</span><br><span class="line">  * path表示路径</span><br><span class="line">  * hasBody表示是否有请求体</span><br><span class="line">  */</span></span><br><span class="line"> <span class="meta">@HTTP</span>(method = <span class="string">"get"</span>, path = <span class="string">"users/&#123;user&#125;"</span>, hasBody = <span class="keyword">false</span>)</span><br><span class="line"> <span class="function">Call&lt;ResponseBody&gt; <span class="title">getFirstBlog</span><span class="params">(@Path(<span class="string">"user"</span>)</span> String user)</span>;</span><br></pre></td></tr></table></figure>
+<p>@Url：使用全路径复写baseUrl，适用于非统一baseUrl的场景。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GET</span></span><br><span class="line"><span class="function">Call&lt;ResponseBody&gt; <span class="title">v3</span><span class="params">(@Url String url)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>@Streaming:用于下载大文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Streaming</span></span><br><span class="line"><span class="meta">@GET</span></span><br><span class="line"><span class="function">Call&lt;ResponseBody&gt; <span class="title">downloadFileWithDynamicUrlAsync</span><span class="params">(@Url String fileUrl)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ResponseBody body = response.body();</span><br><span class="line"><span class="keyword">long</span> fileSize = body.contentLength();</span><br><span class="line">InputStream inputStream = body.byteStream();</span><br></pre></td></tr></table></figure>
+<p><font color="#DC143C" size="5">常用注解</font><br>@Path：URL占位符，用于替换和动态更新,相应的参数必须使用相同的字符串被@Path进行注释</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GET</span>(<span class="string">"group/&#123;id&#125;/users"</span>)</span><br><span class="line">Call&lt;List&lt;User&gt;&gt; groupList(<span class="meta">@Path</span>(<span class="string">"id"</span>) <span class="keyword">int</span> groupId);</span><br><span class="line"><span class="comment">//--&gt; http://baseurl/group/groupId/users</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//等同于：</span></span><br><span class="line"><span class="meta">@GET</span></span><br><span class="line">Call&lt;List&lt;User&gt;&gt; groupListUrl(</span><br><span class="line">      <span class="meta">@Url</span> String url);</span><br></pre></td></tr></table></figure>
+<p>@Query,@QueryMap:查询参数，用于GET查询,需要注意的是@QueryMap可以约定是否需要encode</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GET</span>(<span class="string">"group/users"</span>)</span><br><span class="line">Call&lt;List&lt;User&gt;&gt; groupList(<span class="meta">@Query</span>(<span class="string">"id"</span>) <span class="keyword">int</span> groupId);</span><br><span class="line"><span class="comment">//--&gt; http://baseurl/group/users?id=groupId</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Call&lt;List&lt;News&gt;&gt; getNews((@QueryMap(encoded=true) Map&lt;String, String&gt; options);</span><br></pre></td></tr></table></figure>
+<p>@Body:用于POST请求体，将实例对象根据转换方式转换为对应的json字符串参数，<br>这个转化方式是GsonConverterFactory定义的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@POST</span>(<span class="string">"add"</span>)</span><br><span class="line">Call&lt;List&lt;User&gt;&gt; addUser(<span class="meta">@Body</span> User user);</span><br></pre></td></tr></table></figure>
+<p>@Field，@FieldMap:Post方式传递简单的键值对,<br>需要添加@FormUrlEncoded表示表单提交<br>Content-Type:application/x-www-form-urlencoded</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FormUrlEncoded</span></span><br><span class="line"><span class="meta">@POST</span>(<span class="string">"user/edit"</span>)</span><br><span class="line"><span class="function">Call&lt;User&gt; <span class="title">updateUser</span><span class="params">(@Field(<span class="string">"first_name"</span>)</span> String first, @<span class="title">Field</span><span class="params">(<span class="string">"last_name"</span>)</span> String last)</span>;</span><br></pre></td></tr></table></figure>
+<p>@Part，@PartMap：用于POST文件上传<br>其中@Part MultipartBody.Part代表文件，@Part(“key”) RequestBody代表参数<br>需要添加@Multipart表示支持文件上传的表单，Content-Type: multipart/form-data</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Multipart</span></span><br><span class="line">   <span class="meta">@POST</span>(<span class="string">"upload"</span>)</span><br><span class="line">   <span class="function">Call&lt;ResponseBody&gt; <span class="title">upload</span><span class="params">(@Part(<span class="string">"description"</span>)</span> RequestBody description,</span><br><span class="line">                             @Part MultipartBody.Part file)</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java</span></span><br><span class="line"><span class="comment">// use the FileUtils to get the actual file by uri</span></span><br><span class="line">File file = FileUtils.getFile(<span class="keyword">this</span>, fileUri);</span><br><span class="line"></span><br><span class="line"><span class="comment">// create RequestBody instance from file</span></span><br><span class="line">RequestBody requestFile =</span><br><span class="line">        RequestBody.create(MediaType.parse(<span class="string">"multipart/form-data"</span>), file);</span><br><span class="line"></span><br><span class="line"><span class="comment">// MultipartBody.Part is used to send also the actual file name</span></span><br><span class="line">MultipartBody.Part body =</span><br><span class="line">        MultipartBody.Part.createFormData(<span class="string">"picture"</span>, file.getName(), requestFile);</span><br><span class="line"></span><br><span class="line"><span class="comment">// add another part within the multipart request</span></span><br><span class="line">String descriptionString = <span class="string">"hello, this is description speaking"</span>;</span><br><span class="line">RequestBody description =</span><br><span class="line">        RequestBody.create(</span><br><span class="line">                MediaType.parse(<span class="string">"multipart/form-data"</span>), descriptionString);</span><br></pre></td></tr></table></figure>
+<p>参考：<a href="http://blog.csdn.net/lmj623565791/article/details/51304204" target="_blank" rel="external"> Retrofit2 完全解析 探索与okhttp之间的关系</a><br><a href="https://futurestud.io/blog/retrofit-2-how-to-upload-files-to-server" target="_blank" rel="external">Retrofit 2 — How to Upload Files to Server</a></p>
+<p>@Header：header处理，不能被互相覆盖，用于修饰参数，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//动态设置Header值</span></span><br><span class="line"><span class="meta">@GET</span>(<span class="string">"user"</span>)</span><br><span class="line"><span class="function">Call&lt;User&gt; <span class="title">getUser</span><span class="params">(@Header(<span class="string">"Authorization"</span>)</span> String authorization)</span></span><br></pre></td></tr></table></figure>
+<p>等同于 :<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//静态设置Header值</span></span><br><span class="line"><span class="meta">@Headers</span>(<span class="string">"Authorization: authorization"</span>)<span class="comment">//这里authorization就是上面方法里传进来变量的值</span></span><br><span class="line"><span class="meta">@GET</span>(<span class="string">"widget/list"</span>)</span><br><span class="line"><span class="function">Call&lt;User&gt; <span class="title">getUser</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure></p>
+<p>@Headers 用于修饰方法,用于设置多个Header值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Headers</span>(&#123;</span><br><span class="line">    <span class="string">"Accept: application/vnd.github.v3.full+json"</span>,</span><br><span class="line">    <span class="string">"User-Agent: Retrofit-Sample-App"</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="meta">@GET</span>(<span class="string">"users/&#123;username&#125;"</span>)</span><br><span class="line"><span class="function">Call&lt;User&gt; <span class="title">getUser</span><span class="params">(@Path(<span class="string">"username"</span>)</span> String username)</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="自定义Converter"><a href="#自定义Converter" class="headerlink" title="自定义Converter"></a>自定义Converter</h2><p>retrofit默认情况下支持的converts有Gson,Jackson,Moshi…</p>
+<p>要自定义<code>Converter&lt;F, T&gt;</code>，需要先看一下GsonConverterFactory的实现，<br>GsonConverterFactory实现了内部类Converter.Factory。</p>
+<p>其中GsonConverterFactory中的主要两个方法，主要用于解析request和response的，<br>在Factory中还有一个方法stringConverter，用于String的转换。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//主要用于响应体的处理，Factory中默认实现为返回null，表示不处理</span></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> Converter&lt;ResponseBody, ?&gt; responseBodyConverter(Type type, Annotation[] annotations,</span><br><span class="line">      Retrofit retrofit) &#123;</span><br><span class="line">    TypeAdapter&lt;?&gt; adapter = gson.getAdapter(TypeToken.get(type));</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> GsonResponseBodyConverter&lt;&gt;(gson, adapter);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">  *主要用于请求体的处理，Factory中默认实现为返回null，不能处理返回null</span><br><span class="line">  *作用对象Part、PartMap、Body</span><br><span class="line">  */</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> Converter&lt;?, RequestBody&gt; requestBodyConverter(Type type,</span><br><span class="line">      Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) &#123;</span><br><span class="line">    TypeAdapter&lt;?&gt; adapter = gson.getAdapter(TypeToken.get(type));</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> GsonRequestBodyConverter&lt;&gt;(gson, adapter);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Converter.Factory$stringConverter</span></span><br><span class="line"><span class="comment">/**</span><br><span class="line">  *作用对象Field、FieldMap、Header、Path、Query、QueryMap</span><br><span class="line">  *默认处理是toString</span><br><span class="line">  */</span></span><br><span class="line">  <span class="keyword">public</span> Converter&lt;?, String&gt; stringConverter(Type type, Annotation[] annotations,</span><br><span class="line">          Retrofit retrofit) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<p>GsonRequestBodyConverter实现了<code>Converter&lt;F, T&gt;</code>接口，<br>主要实现了转化的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">T <span class="title">convert</span><span class="params">(F value)</span> <span class="keyword">throws</span> IOException</span>;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/BoBoMEe/AndroidDev/tree/retrofit2/retrofit2/htttp/src/main/java/com/bobomee/android/htttp/retrofit2/converfactory" target="_blank" rel="external">StringConverterFactory</a>实现源码</p>
+<h2 id="自定义Interceptor"><a href="#自定义Interceptor" class="headerlink" title="自定义Interceptor"></a>自定义Interceptor</h2><p>Retrofit 2.0 底层依赖于okHttp，所以需要使用okHttp的Interceptors 来对所有请求进行拦截。<br>我们可以通过自定义Interceptor来实现很多操作,打印日志,缓存,重试等等。</p>
+<p>要实现自己的拦截器需要有以下步骤</p>
+<p> (1) 需要实现Interceptor接口，并复写intercept(Chain chain)方法,返回response<br> (2) Request 和 Response的Builder中有header,addHeader,headers方法,需要注意的是使用header有重复的将会被覆盖,而addHeader则不会。</p>
+<p>标准的 Interceptor写法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OAuthInterceptor</span> <span class="keyword">implements</span> <span class="title">Interceptor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String username;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String password;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">OAuthInterceptor</span><span class="params">(String username, String password)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.username = username;</span><br><span class="line">    <span class="keyword">this</span>.password = password;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Response <span class="title">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    String credentials = username + <span class="string">":"</span> + password;</span><br><span class="line"></span><br><span class="line">    String basic = <span class="string">"Basic "</span> + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);</span><br><span class="line"></span><br><span class="line">    Request originalRequest = chain.request();</span><br><span class="line">    String cacheControl = originalRequest.cacheControl().toString();</span><br><span class="line"></span><br><span class="line">    Request.Builder requestBuilder = originalRequest.newBuilder()</span><br><span class="line">        <span class="comment">//Basic Authentication,也可用于token验证,OAuth验证</span></span><br><span class="line">        .header(<span class="string">"Authorization"</span>, basic)</span><br><span class="line">        .header(<span class="string">"Accept"</span>, <span class="string">"application/json"</span>)</span><br><span class="line">        .method(originalRequest.method(), originalRequest.body());</span><br><span class="line"></span><br><span class="line">    Request request = requestBuilder.build();</span><br><span class="line"></span><br><span class="line">    Response originalResponse = chain.proceed(request);</span><br><span class="line">    Response.Builder responseBuilder =</span><br><span class="line">        <span class="comment">//Cache control设置缓存</span></span><br><span class="line">        originalResponse.newBuilder().header(<span class="string">"Cache-Control"</span>, cacheControl);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> responseBuilder.build();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="缓存策略"><a href="#缓存策略" class="headerlink" title="缓存策略"></a>缓存策略</h2><p>设置缓存就需要用到OkHttp的interceptors，缓存的设置需要靠请求和响应头。<br>如果想要弄清楚缓存机制，则需要了解一下HTTP语义，其中控制缓存的就是<code>Cache-Control</code>字段<br>参考：<a href="http://blog.csdn.net/picasso_l/article/details/50579884" target="_blank" rel="external">Retrofit2.0+okhttp3缓存机制以及遇到的问题</a><br><a href="http://stackoverflow.com/questions/31321963/how-retrofit-with-okhttp-use-cache-data-when-offline" target="_blank" rel="external">How Retrofit with OKHttp use cache data when offline</a><br><a href="http://www.jianshu.com/p/9c3b4ea108a7" target="_blank" rel="external">使用Retrofit和Okhttp实现网络缓存。无网读缓存，有网根据过期时间重新请求</a></p>
+<p>一般情况下我们需要达到的缓存效果是这样的:</p>
+<ul>
+<li>没有网或者网络较差的时候要使用缓存(统一设置)</li>
+<li>有网络的时候，要保证不同的需求，实时性数据不用缓存,一般请求需要缓存(单个请求的header来实现)。</li>
+</ul>
+<p>OkHttp3中有一个Cache类是用来定义缓存的，此类详细介绍了几种缓存策略,具体可看此类源码。</p>
+<blockquote>
+<p>noCache ：不使用缓存，全部走网络<br> noStore ：  不使用缓存，也不存储缓存<br> onlyIfCached ： 只使用缓存<br> maxAge  ：设置最大失效时间，失效则不使用<br> maxStale ：设置最大失效时间，失效则不使用<br> minFresh ：设置最小有效时间，失效则不使用<br> FORCE_NETWORK ： 强制走网络<br> FORCE_CACHE ：强制走缓存</p>
+</blockquote>
+<h3 id="配置目录"><a href="#配置目录" class="headerlink" title="配置目录"></a>配置目录</h3><p>这个是缓存文件的存放位置,okhttp默认是没有缓存,且没有缓存目录的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> HTTP_RESPONSE_DISK_CACHE_MAX_SIZE = <span class="number">10</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">private</span> Cache <span class="title">cache</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//设置缓存路径</span></span><br><span class="line">        <span class="keyword">final</span> File baseDir = AppUtil.getAvailableCacheDir(sContext);</span><br><span class="line">        <span class="keyword">final</span> File cacheDir = <span class="keyword">new</span> File(baseDir, <span class="string">"HttpResponseCache"</span>);</span><br><span class="line">        <span class="comment">//设置缓存 10M</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Cache(cacheDir, HTTP_RESPONSE_DISK_CACHE_MAX_SIZE);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>其中获取cacahe目录,我们一般采取的策略就是应用卸载,即删除。一般就使用如下两个目录:</p>
+<ul>
+<li>data/$packageName/cache:Context.getCacheDir()</li>
+<li>/storage/sdcard0/Andorid/data/$packageName/cache:Context.getExternalCacheDir()</li>
+</ul>
+<p>且当sd卡空间小于data可用空间时,使用data目录。</p>
+<p>最后来一张图看懂Android内存结构,参考：<a href="http://www.tuicool.com/articles/AvUnqiy" target="_blank" rel="external">Android文件存储使用参考 - liaohuqiu</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">    * |   ($rootDir)</span><br><span class="line">    * +- /data                    -&gt; Environment.getDataDirectory()</span><br><span class="line">    * |   |</span><br><span class="line">    * |   |   ($appDataDir)</span><br><span class="line">    * |   +- data/$packageName</span><br><span class="line">    * |       |</span><br><span class="line">    * |       |   ($filesDir)</span><br><span class="line">    * |       +- files            -&gt; Context.getFilesDir() / Context.getFileStreamPath("")</span><br><span class="line">    * |       |      |</span><br><span class="line">    * |       |      +- file1     -&gt; Context.getFileStreamPath("file1")</span><br><span class="line">    * |       |</span><br><span class="line">    * |       |   ($cacheDir)</span><br><span class="line">    * |       +- cache            -&gt; Context.getCacheDir()</span><br><span class="line">    * |       |</span><br><span class="line">    * |       +- app_$name        -&gt;(Context.getDir(String name, int mode)</span><br><span class="line">    * |</span><br><span class="line">    * |   ($rootDir)</span><br><span class="line">    * +- /storage/sdcard0         -&gt; Environment.getExternalStorageDirectory()/ Environment.getExternalStoragePublicDirectory("")</span><br><span class="line">    * |                 |</span><br><span class="line">    * |                 +- dir1   -&gt; Environment.getExternalStoragePublicDirectory("dir1")</span><br><span class="line">    * |                 |</span><br><span class="line">    * |                 |   ($appDataDir)</span><br><span class="line">    * |                 +- Andorid/data/$packageName</span><br><span class="line">    * |                                         |</span><br><span class="line">    * |                                         | ($filesDir)</span><br><span class="line">    * |                                         +- files                  -&gt; Context.getExternalFilesDir("")</span><br><span class="line">    * |                                         |    |</span><br><span class="line">    * |                                         |    +- file1             -&gt; Context.getExternalFilesDir("file1")</span><br><span class="line">    * |                                         |    +- Music             -&gt; Context.getExternalFilesDir(Environment.Music);</span><br><span class="line">    * |                                         |    +- Picture           -&gt; Context.getExternalFilesDir(Environment.Picture);</span><br><span class="line">    * |                                         |    +- ...               -&gt; Context.getExternalFilesDir(String type)</span><br><span class="line">    * |                                         |</span><br><span class="line">    * |                                         |  ($cacheDir)</span><br><span class="line">    * |                                         +- cache                  -&gt; Context.getExternalCacheDir()</span><br><span class="line">    * |                                         |</span><br><span class="line">    * |                                         +- ???</span><br><span class="line">    * &lt;p/&gt;</span><br><span class="line">    * &lt;p/&gt;</span><br><span class="line">    * 1.  其中$appDataDir中的数据，在app卸载之后，会被系统删除。</span><br><span class="line">    * &lt;p/&gt;</span><br><span class="line">    * 2.  $appDataDir下的$cacheDir：</span><br><span class="line">    * Context.getCacheDir()：机身内存不足时，文件会被删除</span><br><span class="line">    * Context.getExternalCacheDir()：空间不足时，文件不会实时被删除，可能返回空对象,Context.getExternalFilesDir("")亦同</span><br><span class="line">    * &lt;p/&gt;</span><br><span class="line">    * 3. 内部存储中的$appDataDir是安全的，只有本应用可访问</span><br><span class="line">    * 外部存储中的$appDataDir其他应用也可访问，但是$filesDir中的媒体文件，不会被当做媒体扫描出来，加到媒体库中。</span><br><span class="line">    * &lt;p/&gt;</span><br><span class="line">    * 4. 在内部存储中：通过  Context.getDir(String name, int mode) 可获取和  $filesDir  /  $cacheDir 同级的目录</span><br><span class="line">    * 命名规则：app_ + name，通过Mode控制目录是私有还是共享</span><br><span class="line">    * &lt;p/&gt;</span><br><span class="line">    * &lt;code&gt;</span><br><span class="line">    * Context.getDir("dir1", MODE_PRIVATE):</span><br><span class="line">    * Context.getDir: /data/data/$packageName/app_dir1</span><br><span class="line">    * &lt;/code&gt;</span><br><span class="line">    */</span></span><br></pre></td></tr></table></figure>
+<h3 id="缓存第一种类型"><a href="#缓存第一种类型" class="headerlink" title="缓存第一种类型"></a>缓存第一种类型</h3><p>配置单个请求的@Headers，设置此请求的缓存策略,不影响其他请求的缓存策略,不设置则没有缓存。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置 单个请求的 缓存时间</span></span><br><span class="line"><span class="meta">@Headers</span>(<span class="string">"Cache-Control: max-age=640000"</span>)</span><br><span class="line"><span class="meta">@GET</span>(<span class="string">"widget/list"</span>)</span><br><span class="line">Call&lt;List&lt;Widget&gt;&gt; widgetList();</span><br></pre></td></tr></table></figure>
+<h3 id="缓存第二种类型"><a href="#缓存第二种类型" class="headerlink" title="缓存第二种类型"></a>缓存第二种类型</h3><p>有网和没网都先读缓存，统一缓存策略，降低服务器压力。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Interceptor <span class="title">cacheInterceptor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      Interceptor cacheInterceptor = <span class="keyword">new</span> Interceptor() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Response <span class="title">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">                Request request = chain.request();</span><br><span class="line">                Response response = chain.proceed(request);</span><br><span class="line"></span><br><span class="line">                String cacheControl = request.cacheControl().toString();</span><br><span class="line">                <span class="keyword">if</span> (TextUtils.isEmpty(cacheControl)) &#123;</span><br><span class="line">                    cacheControl = <span class="string">"public, max-age=60"</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> response.newBuilder()</span><br><span class="line">                        .header(<span class="string">"Cache-Control"</span>, cacheControl)</span><br><span class="line">                        .removeHeader(<span class="string">"Pragma"</span>)</span><br><span class="line">                        .build();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<p>此中方式的缓存Interceptor实现：<a href="https://github.com/BoBoMEe/AndroidDev/blob/retrofit2/retrofit2/htttp/src/main/java/com/bobomee/android/htttp/okhttp/interceptor/ForceCachedInterceptor.java" target="_blank" rel="external">ForceCachedInterceptor.java</a></p>
+<h3 id="缓存第三种类型"><a href="#缓存第三种类型" class="headerlink" title="缓存第三种类型"></a>缓存第三种类型</h3><p>结合前两种，离线读取本地缓存，在线获取最新数据(读取单个请求的请求头，亦可统一设置)。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Interceptor <span class="title">cacheInterceptor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Interceptor() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Response <span class="title">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">                Request request = chain.request();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (!AppUtil.isNetworkReachable(sContext)) &#123;</span><br><span class="line">                    request = request.newBuilder()</span><br><span class="line">                            <span class="comment">//强制使用缓存</span></span><br><span class="line">                            .cacheControl(CacheControl.FORCE_CACHE)</span><br><span class="line">                            .build();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                Response response = chain.proceed(request);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (AppUtil.isNetworkReachable(sContext)) &#123;</span><br><span class="line">                    <span class="comment">//有网的时候读接口上的@Headers里的配置，你可以在这里进行统一的设置</span></span><br><span class="line">                    String cacheControl = request.cacheControl().toString();</span><br><span class="line">                    Logger.i(<span class="string">"has network ,cacheControl="</span> + cacheControl);</span><br><span class="line">                    <span class="keyword">return</span> response.newBuilder()</span><br><span class="line">                            .header(<span class="string">"Cache-Control"</span>, cacheControl)</span><br><span class="line">                            .removeHeader(<span class="string">"Pragma"</span>)</span><br><span class="line">                            .build();</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> maxStale = <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">28</span>; <span class="comment">// tolerate 4-weeks stale</span></span><br><span class="line">                    Logger.i(<span class="string">"network error ,maxStale="</span>+maxStale);</span><br><span class="line">                    <span class="keyword">return</span> response.newBuilder()</span><br><span class="line">                            .header(<span class="string">"Cache-Control"</span>, <span class="string">"public, only-if-cached, max-stale="</span>+maxStale)</span><br><span class="line">                            .removeHeader(<span class="string">"Pragma"</span>)</span><br><span class="line">                            .build();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>此中方式的缓存Interceptor实现：<a href="https://github.com/BoBoMEe/AndroidDev/blob/retrofit2/retrofit2/htttp/src/main/java/com/bobomee/android/htttp/okhttp/interceptor/OfflineCacheControlInterceptor.java" target="_blank" rel="external">OfflineCacheControlInterceptor.java</a></p>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><p>在请求网络的时候,我们不止会得到HttpException,还有我们和服务器约定的errorCode和errorMessage,为了统一处理,我们可以<br>预处理以下上面两个字段,定义BaseModel,在ConverterFactory中进行处理,<br>可参照:</p>
+<ul>
+<li><a href="http://blog.csdn.net/efan006/article/details/50544204" target="_blank" rel="external">Retrofit+RxJava实战日志(3)-网络异常处理</a></li>
+<li><a href="https://futurestud.io/blog/retrofit-2-simple-error-handling" target="_blank" rel="external">retrofit-2-simple-error-handling</a></li>
+</ul>
+<h2 id="网络状态监听"><a href="#网络状态监听" class="headerlink" title="网络状态监听"></a>网络状态监听</h2><p>一般在没有网络的时候使用缓存数据,有网络的时候及时重试获取最新数据,其中获取是否有网络，我们采用广播的形式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NetWorkReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line">        HttpNetUtil.INSTANCE.setConnected(context);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>HttpNetUtil实时获取网络连接状态,关键代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">  * 获取是否连接</span><br><span class="line">  */</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isConnected</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> isConnected;</span><br><span class="line"> &#125;</span><br><span class="line"><span class="comment">/**</span><br><span class="line">  * 判断网络连接是否存在</span><br><span class="line">  *</span><br><span class="line">  * <span class="doctag">@param</span> context</span><br><span class="line">  */</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setConnected</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">     ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);</span><br><span class="line">     <span class="keyword">if</span> (manager == <span class="keyword">null</span>) &#123;</span><br><span class="line">         setConnected(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">         <span class="keyword">if</span> (networkreceivers != <span class="keyword">null</span>) &#123;</span><br><span class="line">             <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, z = networkreceivers.size(); i &lt; z; i++) &#123;</span><br><span class="line">                 Networkreceiver listener = networkreceivers.get(i);</span><br><span class="line">                 <span class="keyword">if</span> (listener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                     listener.onConnected(<span class="keyword">false</span>);</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     NetworkInfo info = manager.getActiveNetworkInfo();</span><br><span class="line"></span><br><span class="line">     <span class="keyword">boolean</span> connected = info != <span class="keyword">null</span> &amp;&amp; info.isConnected();</span><br><span class="line">     setConnected(connected);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span> (networkreceivers != <span class="keyword">null</span>) &#123;</span><br><span class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, z = networkreceivers.size(); i &lt; z; i++) &#123;</span><br><span class="line">             Networkreceiver listener = networkreceivers.get(i);</span><br><span class="line">             <span class="keyword">if</span> (listener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                 listener.onConnected(connected);</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>在需要监听网络的界面或者base(需要判断当前activity是否在栈顶)实现Networkreceiver。</p>
+<h2 id="Retrofit封装"><a href="#Retrofit封装" class="headerlink" title="Retrofit封装"></a>Retrofit封装</h2><p>全局单利的OkHttpClient：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">okHttp() &#123;</span><br><span class="line">        HttpLoggingInterceptor interceptor = <span class="keyword">new</span> HttpLoggingInterceptor();</span><br><span class="line">        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);</span><br><span class="line"></span><br><span class="line">        okHttpClient = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">                <span class="comment">//打印日志</span></span><br><span class="line">                .addInterceptor(interceptor)</span><br><span class="line"></span><br><span class="line">                <span class="comment">//设置Cache目录</span></span><br><span class="line">                .cache(CacheUtil.getCache(UIUtil.getContext()))</span><br><span class="line"></span><br><span class="line">                <span class="comment">//设置缓存</span></span><br><span class="line">                .addInterceptor(cacheInterceptor)</span><br><span class="line">                .addNetworkInterceptor(cacheInterceptor)</span><br><span class="line"></span><br><span class="line">                <span class="comment">//失败重连</span></span><br><span class="line">                .retryOnConnectionFailure(<span class="keyword">true</span>)</span><br><span class="line"></span><br><span class="line">                <span class="comment">//time out</span></span><br><span class="line">                .readTimeout(TIMEOUT_READ, TimeUnit.SECONDS)</span><br><span class="line">                .connectTimeout(TIMEOUT_CONNECTION, TimeUnit.SECONDS)</span><br><span class="line"></span><br><span class="line">                .build()</span><br><span class="line"></span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>全局单利的Retrofit.Builder,这里返回builder是为了方便我们设置baseUrl的,我们可以动态创建多个api接口,当然也可以用@Url注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Retrofit2Client() &#123;</span><br><span class="line">        retrofitBuilder = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">                <span class="comment">//设置OKHttpClient</span></span><br><span class="line">                .client(okHttp.INSTANCE.getOkHttpClient())</span><br><span class="line"></span><br><span class="line">                <span class="comment">//Rx</span></span><br><span class="line">                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())</span><br><span class="line"></span><br><span class="line">                <span class="comment">//String转换器</span></span><br><span class="line">                .addConverterFactory(StringConverterFactory.create())</span><br><span class="line"></span><br><span class="line">                <span class="comment">//gson转化器</span></span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">        ;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>Retrofit2+RxJava 使用Demo：<a href="https://github.com/BoBoMEe/AndroidDev/tree/retrofit2/retrofit2" target="_blank" rel="external">Retrofit2Demo</a></p>
+<p>参考：<br><a href="https://futurestud.io/blog/tag/retrofit" target="_blank" rel="external">Articles tagged in: Retrofit</a></p>
+<p><a href="http://square.github.io/retrofit/#restadapter-configuration" target="_blank" rel="external">官方文档</a></p>
+<p><a href="http://blog.csdn.net/lmj623565791/article/details/51304204" target="_blank" rel="external">Retrofit2 完全解析 探索与okhttp之间的关系</a></p>
+<p><a href="https://drakeet.me/retrofit-2-0-okhttp-3-0-config" target="_blank" rel="external">Retrofit 2.0 + OkHttp 3.0 配置</a></p>
+<p><a href="http://blog.csdn.net/tiankong1206/article/details/50720758" target="_blank" rel="external">更新到Retrofit2的一些技巧</a></p>
+<p><a href="http://omgitsmgp.com/2015/12/02/effective-okhttp/" target="_blank" rel="external">Effective OkHttp</a></p>
+<p><a href="http://www.jianshu.com/p/2710ed1e6b48" target="_blank" rel="external">Okhttp-wiki 之 Interceptors 拦截器</a></p>
+<p><a href="http://blog.csdn.net/picasso_l/article/details/50579884" target="_blank" rel="external">Retrofit2.0+okhttp3缓存机制以及遇到的问题</a></p>
+<p><a href="http://stackoverflow.com/questions/31321963/how-retrofit-with-okhttp-use-cache-data-when-offline" target="_blank" rel="external">How Retrofit with OKHttp use cache data when offline</a></p>
+<p><a href="http://www.jianshu.com/p/9c3b4ea108a7" target="_blank" rel="external">使用Retrofit和Okhttp实现网络缓存。无网读缓存，有网根据过期时间重新请求</a></p>
+<p><a href="https://realm.io/cn/news/droidcon-jake-wharton-simple-http-retrofit-2/" target="_blank" rel="external">用 Retrofit 2 简化 HTTP 请求</a></p>
+<p><a href="http://www.loongwind.com/archives/242.html" target="_blank" rel="external">Retrofit请求参数注解字段说明</a></p>
+<p><a href="http://www.tuicool.com/articles/AvUnqiy" target="_blank" rel="external">Android文件存储使用参考 - liaohuqiu</a></p>
+<p><a href="http://blog.csdn.net/efan006/article/details/50544204" target="_blank" rel="external">Retrofit+RxJava实战日志(3)-网络异常处理</a></p>
+<p><a href="https://futurestud.io/blog/retrofit-2-simple-error-handling" target="_blank" rel="external">retrofit-2-simple-error-handling</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/07/gitbasic/" rel="next" title="git常用命令">
+                <i class="fa fa-chevron-left"></i> git常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/12/androidbanner/" rel="prev" title="Android无限轮播Banner的实现">
+                Android无限轮播Banner的实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/11031953?v=3&s=460"
+               alt="BoBoMEe" />
+          <p class="site-author-name" itemprop="name">BoBoMEe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BoBoMEe" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/wbwjx" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-archive"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REST"><span class="nav-number">2.</span> <span class="nav-text">REST</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-0与1-9使用比较"><span class="nav-number">3.</span> <span class="nav-text">2.0与1.9使用比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-9使用配置："><span class="nav-number">4.</span> <span class="nav-text">1.9使用配置：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-0使用配置"><span class="nav-number">5.</span> <span class="nav-text">2.0使用配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-0使用介绍"><span class="nav-number">6.</span> <span class="nav-text">2.0使用介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法："><span class="nav-number">6.1.</span> <span class="nav-text">基本用法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#retrofit注解："><span class="nav-number">6.2.</span> <span class="nav-text">retrofit注解：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义Converter"><span class="nav-number">7.</span> <span class="nav-text">自定义Converter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义Interceptor"><span class="nav-number">8.</span> <span class="nav-text">自定义Interceptor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存策略"><span class="nav-number">9.</span> <span class="nav-text">缓存策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置目录"><span class="nav-number">9.1.</span> <span class="nav-text">配置目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存第一种类型"><span class="nav-number">9.2.</span> <span class="nav-text">缓存第一种类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存第二种类型"><span class="nav-number">9.3.</span> <span class="nav-text">缓存第二种类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存第三种类型"><span class="nav-number">9.4.</span> <span class="nav-text">缓存第三种类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误处理"><span class="nav-number">10.</span> <span class="nav-text">错误处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络状态监听"><span class="nav-number">11.</span> <span class="nav-text">网络状态监听</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit封装"><span class="nav-number">12.</span> <span class="nav-text">Retrofit封装</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BoBoMEe</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://BoBoMEe.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://bobomee.github.io/2016/05/12/retrofit/';
+          this.page.identifier = '2016/05/12/retrofit/';
+          this.page.title = 'Retrofit2.0使用总结及注意事项';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://BoBoMEe.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (search_path.endsWith("json")) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("bPwqQANbtRd43HfAWEzQJPmY-gzGzoHsz", "b70xeWPTwa59yj7WmF7IKRdW");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
