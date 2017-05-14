@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="rxjava," />
+  <meta name="keywords" content="rxjava,retrofit," />
 
 
 
@@ -92,28 +92,22 @@
 
 
 
-<meta name="description" content="RxJava+Retrofit错误预处理
-
-概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
+<meta name="description" content="概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
 错误和异常举例比如,在服务器返回数据中,假设服务器遵循规范,请求体 一般类似下面这种,
-1234567&amp;#123;">
+1234567&amp;#123;    &quot;success&quot;: false, /">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RxJava+Retrofit错误预处理">
 <meta property="og:url" content="http://bobomee.github.io/2016/08/01/rxjava-retrofit_error/index.html">
 <meta property="og:site_name" content="BoBoMEe">
-<meta property="og:description" content="RxJava+Retrofit错误预处理
-
-概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
+<meta property="og:description" content="概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
 错误和异常举例比如,在服务器返回数据中,假设服务器遵循规范,请求体 一般类似下面这种,
-1234567&amp;#123;">
-<meta property="og:updated_time" content="2017-05-14T02:58:15.000Z">
+1234567&amp;#123;    &quot;success&quot;: false, /">
+<meta property="og:updated_time" content="2017-05-14T11:17:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxJava+Retrofit错误预处理">
-<meta name="twitter:description" content="RxJava+Retrofit错误预处理
-
-概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
+<meta name="twitter:description" content="概述在使用 RxJava+Retrofit 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 Subscribe 代码我们做了很多的尝试,比如 自定义操作符,自定义Transformer,泛型处理,和 自定义 Subscriber等
 错误和异常举例比如,在服务器返回数据中,假设服务器遵循规范,请求体 一般类似下面这种,
-1234567&amp;#123;">
+1234567&amp;#123;    &quot;success&quot;: false, /">
 
 
 
@@ -317,6 +311,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android基础/" itemprop="url" rel="index">
+                    <span itemprop="name">Android基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -363,9 +379,7 @@
       
 
       
-        <blockquote class="blockquote-center">RxJava+Retrofit错误预处理</blockquote>
-
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在使用 <code>RxJava+Retrofit</code> 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 <code>Subscribe</code> 代码<br>我们做了很多的尝试,比如 <code>自定义操作符</code>,<code>自定义Transformer</code>,<code>泛型处理</code>,和 自定义 <code>Subscriber</code>等</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在使用 <code>RxJava+Retrofit</code> 结合的网络框架时,为了避免打破流式调用 和 过于繁杂的 <code>Subscribe</code> 代码<br>我们做了很多的尝试,比如 <code>自定义操作符</code>,<code>自定义Transformer</code>,<code>泛型处理</code>,和 自定义 <code>Subscriber</code>等</p>
 <h2 id="错误和异常举例"><a href="#错误和异常举例" class="headerlink" title="错误和异常举例"></a>错误和异常举例</h2><p>比如,在服务器返回数据中,假设服务器遵循规范,请求体 一般类似下面这种,</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"success"</span>: <span class="keyword">false</span>, <span class="comment">// 是否成功</span></span><br><span class="line">    <span class="string">"code"</span>: <span class="string">"500"</span>,   <span class="comment">// 响应码</span></span><br><span class="line">    <span class="string">"data"</span>: &#123;</span><br><span class="line">        <span class="comment">// 内容,错误的时候返回""</span></span><br><span class="line">    &#125;      </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
@@ -423,6 +437,8 @@
         <div class="post-tags">
           
             <a href="/tags/rxjava/" rel="tag"># rxjava</a>
+          
+            <a href="/tags/retrofit/" rel="tag"># retrofit</a>
           
         </div>
       
